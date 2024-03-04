@@ -1,9 +1,9 @@
 version: '3.8'
 
 services:
-  explorer:
+  sprawler:
     build: .
-    container_name: explorer
+    container_name: sprawler
     ports:
       - "8080:8080"
 

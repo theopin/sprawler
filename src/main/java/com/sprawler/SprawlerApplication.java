@@ -1,13 +1,13 @@
-package com.sprawler.explorer;
+package com.sprawler;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ExplorerApplication {
+public class SprawlerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ExplorerApplication.class, args);
+		SpringApplication.run(SprawlerApplication.class, args);
 	}
 
 }

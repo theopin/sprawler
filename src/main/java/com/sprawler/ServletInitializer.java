@@ -1,4 +1,4 @@
-package com.sprawler.explorer;
+package com.sprawler;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -7,7 +7,7 @@ public class ServletInitializer extends SpringBootServletInitializer {
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(ExplorerApplication.class);
+		return application.sources(SprawlerApplication.class);
 	}
 
 }
