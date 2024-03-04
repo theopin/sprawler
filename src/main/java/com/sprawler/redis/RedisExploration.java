@@ -7,37 +7,25 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.stereotype.Component;
 
-import java.util.logging.Logger;
 
+@Component
 public class RedisExploration {
-
-    private static final Logger LOGGER = Logger.getLogger(RedisExploration.class.getName());
-
-
 
     @Bean("primaryLettuceFactory")
     public LettuceConnectionFactory primaryLettuceConnectionFactory() {
-        LOGGER.info("HELLO PRIMARY");
-        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration("localhost", 6379);
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration("redis", 6379);
 
         LettuceConnectionFactory connectionFactory = new LettuceConnectionFactory(redisStandaloneConfiguration);;
         connectionFactory.afterPropertiesSet();
         return connectionFactory;
     }
 
-    @Bean("secondaryLettuceFactory")
-    public LettuceConnectionFactory secondaryLettuceConnectionFactory() {
-        LOGGER.info("HELLO SECONDARY");
-        LettuceConnectionFactory connectionFactory = new LettuceConnectionFactory();
-        connectionFactory.afterPropertiesSet();
-        // Additional configuration for secondary connection factory if needed
-        return connectionFactory;
-    }
 
     @Bean("redisTemplate")
-    public RedisTemplate<String, String> redisTemplate(@Qualifier("primaryLettuceFactory") RedisConnectionFactory connectionFactory) {
-        LOGGER.info("HELLO REDIS");
+    public RedisTemplate<String, String> redisTemplate(
+            @Qualifier("primaryLettuceFactory") RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, String> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
         template.setDefaultSerializer(StringRedisSerializer.UTF_8);

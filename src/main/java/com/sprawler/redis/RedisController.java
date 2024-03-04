@@ -1,8 +1,5 @@
 package com.sprawler.redis;
 
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -15,10 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/redis")
 public class RedisController {
 
-    private static final Log LOG = LogFactory.getLog(RedisController.class);
 
     @Autowired
-    //@Qualifier("redisTemplate")
+    @Qualifier("redisTemplate")
     private RedisTemplate<String, String> redisTemplate;
 
 
