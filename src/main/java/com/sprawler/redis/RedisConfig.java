@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @PropertySource("classpath:application.properties")
-public class RedisExploration {
+public class RedisConfig {
 
     @Value("${redis.host}")
     private String redisHost;
