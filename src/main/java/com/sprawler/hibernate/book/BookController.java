@@ -1,7 +1,5 @@
 package com.sprawler.hibernate.book;
 
-import com.sprawler.hibernate.book.Book;
-import com.sprawler.hibernate.book.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +14,16 @@ public class BookController {
     @Autowired
     @Qualifier("bookService")
     private BookService bookService;
+
+    @GetMapping("/new")
+    public Object createNewBook() {
+
+        Book newBook = new Book();
+        newBook.setName("GHEE");
+
+        return bookService.createNewEntity(newBook);
+
+    }
 
     @GetMapping
     public List<Book> getAllBookList() {
