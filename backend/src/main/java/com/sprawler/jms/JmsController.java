@@ -1,6 +1,8 @@
 package com.sprawler.jms;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/jms")
 public class JmsController {
 
+    private static final Logger LOGGER = LogManager.getLogger(JmsController.class);
 
     @Autowired
     @Qualifier("mqJmsSender")
@@ -20,6 +23,7 @@ public class JmsController {
 
     @PostMapping
     public JmsResponse sendNewMessage(@RequestBody JmsRequest request) {
+        LOGGER.info("Sending message to: " + request.queue());
         jmsSenderObject.sendMessage(request.queue(), request.message());
 
         return new JmsResponse("sent message");
