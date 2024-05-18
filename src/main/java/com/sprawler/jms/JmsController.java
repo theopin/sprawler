@@ -19,10 +19,10 @@ public class JmsController {
 
 
     @PostMapping
-    public JmsResponse createNewKeyValue(@RequestBody JmsRequest request) {
+    public JmsResponse sendNewMessage(@RequestBody JmsRequest request) {
         jmsSenderObject.sendMessage(request.queue(), request.message());
 
-        return new JmsResponse("ss","done");
+        return new JmsResponse("sent message");
     }
 
 
