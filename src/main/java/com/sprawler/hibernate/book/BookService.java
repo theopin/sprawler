@@ -1,32 +1,55 @@
 package com.sprawler.hibernate.book;
 
+import com.sprawler.hibernate.commons.HibernateService;
 import jakarta.transaction.Transactional;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service("bookService")
-public class BookService {
+public class BookService implements HibernateService<Book> {
 
     @Autowired
     @Qualifier("bookRepository")
     private BookRepository bookRepositoryObject;
 
-    @Autowired
-    @Qualifier("sessionFactory")
-    private SessionFactory sessionFactory;
-
-    public List<Book> list() {
+    @Override
+    public List<Book> getAllEntities() {
         return bookRepositoryObject.findAll();
     }
 
-    @Transactional
-    public Object createNewEntity(Object entity) {
-        Session session = sessionFactory.getCurrentSession();
-        return session.save(entity);
+    @Override
+    public Optional<Book> getEntityById(Long id) {
+        return bookRepositoryObject.findById(id);
     }
+
+    @Override
+    @Transactional
+    public Book createEntity(Book book) {
+        return bookRepositoryObject.save(book);
+    }
+
+    @Override
+    @Transactional
+    public Book updateEntity(Long id, Book updatedBook) {
+        Optional<Book> retrievedBookList = bookRepositoryObject.findById(id);
+
+        if (retrievedBookList.isPresent()) {
+            updatedBook.setId(id);
+            return bookRepositoryObject.save(updatedBook);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    @Transactional
+    public void deleteEntity(Long id) {
+        bookRepositoryObject.deleteById(id);
+    }
+
+
 }
