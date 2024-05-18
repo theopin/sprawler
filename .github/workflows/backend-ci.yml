@@ -9,7 +9,8 @@ on:
       - '.github/workflows/backend_ci.yml'
 
 jobs:
-  test-app:
+
+  build-1:
     runs-on: ubuntu-latest
 
     defaults:
@@ -18,10 +19,21 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-  build-app:
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'corretto'
+
+      - name: Build with Maven
+        run: mvn clean install -DskipTests -T 5
+
+  junit-2-1:
     runs-on: ubuntu-latest
+
+    needs: [build-1]
 
     defaults:
       run:
@@ -29,12 +41,21 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-  deploy-app:
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'corretto'
+
+      - name: Build with Maven
+        run: mvn test
+
+  codeql-2-2:
     runs-on: ubuntu-latest
 
-    needs: [build-app, test-app]
+    needs: [build-1]
 
     defaults:
       run:
@@ -42,4 +63,14 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: java-kotlin
+
+      - name: Analyze with CodeQL
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:java-kotlin"
