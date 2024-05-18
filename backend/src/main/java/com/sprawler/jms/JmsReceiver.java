@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 public class JmsReceiver {
 
     @JmsListener(destination = "myDestination")
-    public void SampleJmsListenerMethod(String incomingMessage) {
+    public void sampleJmsListenerMethod(String incomingMessage) {
         System.out.println(incomingMessage);
     }
     
