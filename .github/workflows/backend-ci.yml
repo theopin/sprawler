@@ -102,7 +102,6 @@ jobs:
           java-version: 17
           distribution: 'corretto'
 
-
       - name: Build and Run SpotBugs
         run: |
           mvn --no-transfer-progress clean compile spotbugs:spotbugs
