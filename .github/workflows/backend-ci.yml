@@ -49,7 +49,7 @@ jobs:
           java-version: 17
           distribution: 'corretto'
 
-      - name: Build with Maven
+      - name: Test Junit with Maven
         run: mvn test -q
 
   codeql-2-2:
@@ -69,6 +69,10 @@ jobs:
         uses: github/codeql-action/init@v3
         with:
           languages: java-kotlin
+
+      - name: Build with Maven
+        run: |
+          mvn clean install -q -DskipTests -T 5
 
       - name: Analyze with CodeQL
         uses: github/codeql-action/analyze@v3
