@@ -23,7 +23,6 @@ public class DataSourceConfig {
 
 
     @Autowired
-    @Qualifier("env")
     private Environment env;
 
     @Bean("dataSource")
