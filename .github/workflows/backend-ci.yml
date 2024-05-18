@@ -52,31 +52,7 @@ jobs:
       - name: Test Junit with Maven
         run: mvn --no-transfer-progress surefire:test
 
-      - name: Generate Test Report
-        run: mvn --no-transfer-progress surefire-report:report
 
-      - name: Archive Test Results
-        uses: actions/upload-artifact@v3
-        with:
-          name: junit-test-results
-          path: target/surefire-reports/*.xml
-
-      - name: Analyze Test Coverage
-        run: mvn --no-transfer-progress jacoco:report
-
-      - name: Archive Coverage Report
-        uses: actions/upload-artifact@v3
-        with:
-          name: jacoco-coverage-report
-          path: target/site/jacoco/*.html
-
-      - name: Display Test Results in PR
-        uses: dorny/test-reporter@v1
-        with:
-          name: Surefire
-          path: target/surefire-reports/TEST-*.xml
-          reporter: java-junit
-          fail-on-error: false
 
   codeql-2-2:
     runs-on: ubuntu-latest
