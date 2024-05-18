@@ -28,7 +28,7 @@ jobs:
           distribution: 'corretto'
 
       - name: Build with Maven
-        run: mvn clean install -DskipTests -T 5
+        run: mvn clean install -q -DskipTests -T 5
 
   junit-2-1:
     runs-on: ubuntu-latest
@@ -50,7 +50,7 @@ jobs:
           distribution: 'corretto'
 
       - name: Build with Maven
-        run: mvn test
+        run: mvn test -q
 
   codeql-2-2:
     runs-on: ubuntu-latest
@@ -72,5 +72,3 @@ jobs:
 
       - name: Analyze with CodeQL
         uses: github/codeql-action/analyze@v3
-        with:
-          category: "/language:java-kotlin"
