@@ -40,10 +40,13 @@ public class DataSourceConfig {
     public Properties hibernateProperties() {
         LOGGER.info("Setting up hibernate properties bean");
         Properties properties = new Properties();
-        properties.put("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
-        properties.put("hibernate.format_sql", env.getProperty("hibernate.format_sql"));
-        properties.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
-        properties.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
+        if (env != null) {
+            properties.put("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
+            properties.put("hibernate.format_sql", env.getProperty("hibernate.format_sql"));
+            properties.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
+            properties.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
+        }
+
         return properties;
     }
 
