@@ -1,0 +1,45 @@
+name: Continuous Integration - Backend
+
+on:
+  pull_request:
+    branches:
+      - main # Run the workflow only on pull requests to the main branch
+    paths:
+      - 'backend/**' # Workflow triggered on changes to code
+      - '.github/workflows/backend_ci.yml'
+
+jobs:
+  test-app:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: .
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+  build-app:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: .
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+  deploy-app:
+    runs-on: ubuntu-latest
+
+    needs: [build-app, test-app]
+
+    defaults:
+      run:
+        working-directory: .
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
