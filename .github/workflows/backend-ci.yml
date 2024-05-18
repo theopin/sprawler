@@ -50,7 +50,7 @@ jobs:
           distribution: 'corretto'
 
       - name: Test Junit with Maven
-        run: mvn test -q
+        run: mvn surefire:test
 
   codeql-2-2:
     runs-on: ubuntu-latest
