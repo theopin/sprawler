@@ -45,6 +45,12 @@ public class DataSourceConfig {
             properties.put("hibernate.format_sql", env.getProperty("hibernate.format_sql"));
             properties.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
             properties.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
+        } else {
+            LOGGER.warn("Environment is null, using default hibernate properties");
+            properties.put("hibernate.show_sql", "false");
+            properties.put("hibernate.format_sql", "false");
+            properties.put("hibernate.hbm2ddl.auto", "none");
+            properties.put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
         }
 
         return properties;
