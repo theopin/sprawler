@@ -1,6 +1,5 @@
 package com.sprawler.jms.config;
 
-import com.sprawler.redis.RedisConfig;
 import jakarta.jms.ConnectionFactory;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.logging.log4j.LogManager;
