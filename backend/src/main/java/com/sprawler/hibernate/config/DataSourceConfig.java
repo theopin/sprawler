@@ -52,19 +52,6 @@ public class DataSourceConfig {
     }
 
 
-//    @Primary
-//    @Bean("sessionFactory")
-//    public LocalSessionFactoryBean sessionFactory(
-//            @Qualifier("dataSource") DataSource dataSource,
-//            @Qualifier("hibernateProperties") Properties hibernateProperties)  {
-//        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-//        sessionFactory.setDataSource(dataSource);
-//        sessionFactory.setPackagesToScan("com.sprawler.hibernate");
-//        sessionFactory.setHibernateProperties(hibernateProperties);
-//
-//        return sessionFactory;
-//    }
-
 
     @Bean("entityManagerFactory")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(

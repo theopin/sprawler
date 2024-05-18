@@ -2,8 +2,8 @@ version: '3.8'
 
 services:
   sprawler:
-    build: .
-    container_name: sprawler
+    build: ./backend
+    container_name: sprawler-backend
     ports:
       - "8080:8080"
 
