@@ -90,12 +90,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Download built artifact
-        uses: actions/download-artifact@v4.1.7
-        with:
-          name: sprawler-backend-artifact
-          path: 'target/sprawler.war'
-
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
