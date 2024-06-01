@@ -49,11 +49,8 @@ jobs:
           java-version: 17
           distribution: 'corretto'
 
-      - name: Build with Maven
-        run: mvn clean install
-
       - name: Test Junit with Maven and generate coverage report
-        run: mvn --no-transfer-progress clean test
+        run: mvn --no-transfer-progress clean test jacoco:report
 
       - name: Archive Test Results
         uses: actions/upload-artifact@v4.3.3
@@ -67,6 +64,8 @@ jobs:
           name: jacoco-coverage-report
           path: '**/target/site/jacoco'
 
+      - name: List Directory Contents
+        run: ls -R
 
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v3
