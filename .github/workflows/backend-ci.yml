@@ -59,18 +59,19 @@ jobs:
         uses: actions/upload-artifact@v4.3.3
         with:
           name: junit-test-results
-          path: target/surefire-reports/*.xml
+          path: '**/target/surefire-reports/*.xml'
 
       - name: Archive Coverage Report
         uses: actions/upload-artifact@v4.3.3
         with:
           name: jacoco-coverage-report
-          path: target/site/jacoco
+          path: '**/target/site/jacoco'
+
 
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
-          files: target/site/jacoco/jacoco.xml
+          files: '**/target/site/jacoco/jacoco.xml'
           fail_ci_if_error: false
 
   codeql-2-2:
@@ -128,7 +129,7 @@ jobs:
       - name: Upload Spotbugs analysis to Github Actions
         uses: jwgmeligmeyling/spotbugs-github-action@master
         with:
-          path: backend/target/spotbugsXml.xml
+          path: '**/spotbugsXml.xml'
 
   pmd-2-4:
     runs-on: ubuntu-latest
