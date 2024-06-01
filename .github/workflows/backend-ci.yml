@@ -49,11 +49,11 @@ jobs:
           java-version: 17
           distribution: 'corretto'
 
-      - name: Test Junit with Maven
-        run: mvn clean test
+      - name: Build with Maven
+        run: mvn clean install
 
-      - name: Generate Coverage Report
-        run: mvn clean jacoco:report
+      - name: Test Junit with Maven and generate coverage report
+        run: mvn --no-transfer-progress clean test
 
       - name: Archive Test Results
         uses: actions/upload-artifact@v4.3.3
