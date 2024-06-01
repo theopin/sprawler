@@ -123,7 +123,7 @@ jobs:
 
       - name: Build and Run SpotBugs
         run: |
-          mvn --no-transfer-progress clean compile spotbugs:spotbugs
+          mvn spotbugs:spotbugs
 
       - name: Upload SpotBugs Findings
         uses: jwgmeligmeyling/spotbugs-github-action@master
@@ -150,7 +150,7 @@ jobs:
           distribution: 'corretto'
 
       - name: Build with Maven
-        run: mvn --no-transfer-progress -B verify pmd:pmd
+        run: mvn pmd:pmd
 
       - uses: jwgmeligmeyling/pmd-github-action@master
         with:
@@ -175,7 +175,7 @@ jobs:
           distribution: 'corretto'
 
       - name: Build with Maven
-        run: mvn --no-transfer-progress -B verify checkstyle:checkstyle
+        run: mvn checkstyle:checkstyle
 
       - uses: jwgmeligmeyling/checkstyle-github-action@master
         with:
