@@ -1,12 +1,9 @@
 name: Backend Service Continuous Integration - Build
 
 on:
-  pull_request:
-    branches:
-      - main # Run the workflow only on pull requests to the main branch
-    paths:
-      - 'backend/**' # Workflow triggered on changes to code
-      - '.github/workflows/backend_ci.yml'
+  workflow_run:
+    types:
+      - completed
 
 jobs:
 
