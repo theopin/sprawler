@@ -50,7 +50,7 @@ jobs:
           distribution: 'corretto'
 
       - name: Test Junit with Maven
-        run: mvn --no-transfer-progress clean test
+        run: mvn clean test
 
       - name: Generate Coverage Report
         run: mvn --no-transfer-progress jacoco:report
