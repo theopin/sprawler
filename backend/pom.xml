@@ -4,17 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.sprawler</groupId>
-        <artifactId>sprawler</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
-    </parent>
+    <name>sprawler</name>
+    <description>Java Integration Explorer</description>
 
     <artifactId>backend</artifactId>
     <packaging>war</packaging>
-
-    <name>sprawler</name>
-    <description>Java Integration Explorer</description>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
