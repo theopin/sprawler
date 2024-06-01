@@ -96,6 +96,9 @@ jobs:
           java-version: 17
           distribution: 'corretto'
 
+      - name: Build with Maven
+        run: mvn --no-transfer-progress clean install -q -DskipTests -T 5
+
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
