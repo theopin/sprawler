@@ -49,29 +49,25 @@ jobs:
           java-version: 17
           distribution: 'corretto'
 
-      - name: Test Junit with Maven and generate coverage report
+      - name: Run Junit tests and generate Jacoco Report
         run: mvn --no-transfer-progress clean test jacoco:report
-
-      - name: List Directory Contents
-        run: ls -R
-
 
       - name: Archive Test Results
         uses: actions/upload-artifact@v4.3.3
         with:
           name: junit-test-results
-          path: '**/target/surefire-reports/*.xml'
+          path: 'target/surefire-reports/*.xml'
 
       - name: Archive Coverage Report
         uses: actions/upload-artifact@v4.3.3
         with:
           name: jacoco-coverage-report
-          path: '**/target/site/jacoco'
+          path: 'target/site/jacoco'
 
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
-          files: '**/target/site/jacoco/jacoco.xml'
+          files: 'target/site/jacoco/jacoco.xml'
           fail_ci_if_error: false
 
   codeql-2-2:
