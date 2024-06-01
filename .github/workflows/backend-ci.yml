@@ -1,5 +1,4 @@
-name: Backend Service Continuous Integration - Test
-
+name: Backend Service Continuous Integration
 on:
   workflow_run:
     workflows: ["Backend Service Continuous Integration - Build"]
@@ -7,6 +6,26 @@ on:
       - completed
 
 jobs:
+
+  build-1:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./backend
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'corretto'
+
+      - name: Build with Maven
+        run: mvn --no-transfer-progress clean install -q -DskipTests -T 5
 
   junit-2-1:
     runs-on: ubuntu-latest
@@ -67,9 +86,6 @@ jobs:
         uses: github/codeql-action/init@v3
         with:
           languages: java-kotlin
-
-      - name: Build with Maven
-        run: mvn clean install -q -DskipTests -T 5
 
       - name: Analyze with CodeQL
         uses: github/codeql-action/analyze@v3
