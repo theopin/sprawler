@@ -13,7 +13,18 @@
     <artifactId>backend</artifactId>
     <packaging>war</packaging>
 
-    <name>backend</name>
+    <name>sprawler</name>
+    <description>Java Integration Explorer</description>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring.boot.version>3.3.0</spring.boot.version>
+        <spring.version>6.1.7</spring.version>
+        <log4j.version>2.23.1</log4j.version>
+    </properties>
+
 
     <dependencies>
         <dependency>
@@ -153,6 +164,16 @@
                     <includeTests>true</includeTests>
                     <failOnViolation>false</failOnViolation>
                     <skipEmptyReport>false</skipEmptyReport>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.3.1</version>
+                <configuration>
+                    <configLocation>google_checks.xml</configLocation>
+                    <consoleOutput>true</consoleOutput>
                 </configuration>
             </plugin>
         </plugins>
