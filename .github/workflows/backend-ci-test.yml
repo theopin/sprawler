@@ -16,8 +16,14 @@ jobs:
         working-directory: ./backend
 
     steps:
-      - name: Checkout Repository and set up JDK environment
-        uses: ./.github/actions/setup-repo-java
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'corretto'
 
       - name: Run Junit tests and generate Jacoco Report
         run: mvn --no-transfer-progress clean test jacoco:report
@@ -48,8 +54,14 @@ jobs:
         working-directory: ./backend
 
     steps:
-      - name: Checkout Repository and set up JDK environment
-        uses: ./.github/actions/setup-repo-java
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'corretto'
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
@@ -70,8 +82,14 @@ jobs:
         working-directory: ./backend
 
     steps:
-      - name: Checkout Repository and set up JDK environment
-        uses: ./.github/actions/setup-repo-java
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'corretto'
 
       - name: Run Spotbugs analysis
         run: |
@@ -90,8 +108,14 @@ jobs:
         working-directory: ./backend
 
     steps:
-      - name: Checkout Repository and set up JDK environment
-        uses: ./.github/actions/setup-repo-java
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'corretto'
 
       - name: Run PMD analysis
         run: mvn --no-transfer-progress clean pmd:pmd
@@ -109,8 +133,14 @@ jobs:
         working-directory: ./backend
 
     steps:
-      - name: Checkout Repository and set up JDK environment
-        uses: ./.github/actions/setup-repo-java
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'corretto'
 
       - name: Run Checkstyle analysis
         run: mvn --no-transfer-progress clean checkstyle:checkstyle
