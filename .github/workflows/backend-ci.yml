@@ -121,15 +121,14 @@ jobs:
           java-version: 17
           distribution: 'corretto'
 
-      - name: Build and Run SpotBugs
+      - name: Run Spotbugs analysis
         run: |
-          mvn spotbugs:spotbugs
+          mvn clean spotbugs:spotbugs
 
-      - name: Upload SpotBugs Findings
+      - name: Upload Spotbugs analysis to Github Actions
         uses: jwgmeligmeyling/spotbugs-github-action@master
         with:
           path: backend/target/spotbugsXml.xml
-
 
   pmd-2-4:
     runs-on: ubuntu-latest
@@ -149,10 +148,11 @@ jobs:
           java-version: 17
           distribution: 'corretto'
 
-      - name: Build with Maven
-        run: mvn pmd:pmd
+      - name: Run PMD analysis
+        run: mvn clean pmd:pmd
 
-      - uses: jwgmeligmeyling/pmd-github-action@master
+      - name: Upload PMD analysis to Github Actions
+        uses: jwgmeligmeyling/pmd-github-action@master
         with:
           path: '**/pmd.xml'
 
@@ -174,9 +174,10 @@ jobs:
           java-version: 17
           distribution: 'corretto'
 
-      - name: Build with Maven
-        run: mvn checkstyle:checkstyle
+      - name: Run Checkstyle analysis
+        run: mvn clean checkstyle:checkstyle
 
-      - uses: jwgmeligmeyling/checkstyle-github-action@master
+      - name: Upload Checkstyle analysis to Github Actions
+        uses: jwgmeligmeyling/checkstyle-github-action@master
         with:
           path: '**/checkstyle-result.xml'
