@@ -80,7 +80,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: .
+        working-directory: ./backend
 
     steps:
       - name: Checkout Repository
