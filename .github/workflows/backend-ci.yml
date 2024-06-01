@@ -53,7 +53,7 @@ jobs:
         run: mvn clean test
 
       - name: Generate Coverage Report
-        run: mvn --no-transfer-progress jacoco:report
+        run: mvn clean jacoco:report
 
       - name: Archive Test Results
         uses: actions/upload-artifact@v4.3.3
