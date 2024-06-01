@@ -7,8 +7,11 @@
     <name>sprawler</name>
     <description>Java Integration Explorer</description>
 
-    <artifactId>backend</artifactId>
+    <groupId>com.sprawler</groupId>
+    <artifactId>sprawlerBackend</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
+
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
