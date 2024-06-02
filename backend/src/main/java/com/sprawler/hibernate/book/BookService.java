@@ -12,6 +12,7 @@ import java.util.Optional;
 @Service("bookService")
 public class BookService implements HibernateService<Book> {
 
+    private static String unused;
     @Autowired
     @Qualifier("bookRepository")
     private BookRepository bookRepositoryObject;

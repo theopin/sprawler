@@ -107,34 +107,7 @@ jobs:
       - name: Analyze with CodeQL
         uses: github/codeql-action/analyze@v3
 
-  spotbugs-2-3:
-    runs-on: ubuntu-latest
-    needs: ["build-1"]
-
-    defaults:
-      run:
-        working-directory: ./backend
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: 17
-          distribution: 'corretto'
-
-      - name: Run Spotbugs analysis
-        run: |
-          mvn --no-transfer-progress clean spotbugs:spotbugs
-
-      - name: Upload Spotbugs analysis to Github Actions
-        uses: jwgmeligmeyling/spotbugs-github-action@master
-        with:
-          path: '**/spotbugsXml.xml'
-
-  pmd-2-4:
+  pmd-2-3:
     runs-on: ubuntu-latest
     needs: ["build-1"]
 
@@ -153,14 +126,14 @@ jobs:
           distribution: 'corretto'
 
       - name: Run PMD analysis
-        run: mvn --no-transfer-progress clean pmd:pmd
+        run: mvn --no-transfer-progress clean pmd:check
 
       - name: Upload PMD analysis to Github Actions
         uses: jwgmeligmeyling/pmd-github-action@master
         with:
-          path: '**/pmd.xml'
+          path: 'backend/target/pmd.xml'
 
-  checkstyle-2-5:
+  checkstyle-2-4:
     runs-on: ubuntu-latest
     needs: ["build-1"]
 
@@ -184,4 +157,4 @@ jobs:
       - name: Upload Checkstyle analysis to Github Actions
         uses: jwgmeligmeyling/checkstyle-github-action@master
         with:
-          path: '**/checkstyle-result.xml'
+          path: 'backend/target/checkstyle-result.xml'
