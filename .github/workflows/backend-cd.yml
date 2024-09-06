@@ -142,7 +142,7 @@ jobs:
         run : |
           echo "Deployment to ECS"
 
-  # Deploy published image to ACO
+  # Deploy published image to ACI
   sd-4c-deploy-azure-aci:
     runs-on: ubuntu-latest
     needs: ["sd-3c-upload-azure-acr"]
