@@ -174,7 +174,7 @@ jobs:
 
   si-4-containerize:
     runs-on: ubuntu-latest
-    needs: ["si-2-junit"]
+    needs: ["si-2-test-junit"]
 
     defaults:
       run:
