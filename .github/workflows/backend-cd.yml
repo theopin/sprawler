@@ -21,6 +21,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Log Working Directory as Environment Variable
+        run: |
+          echo "WORKING_DIRECTORY=$(pwd)" >> $GITHUB_ENV
+          echo "Current working directory: ${{env.WORKING_DIRECTORY}}"
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -30,18 +35,11 @@ jobs:
       - name: Build with Maven
         run: mvn --no-transfer-progress clean install -q -DskipTests -T 5
 
-      - name: Verify working directory
-        run: pwd
-
-      - name: List contents
-        run: ls -la ${{ github.workspace }}
-
-
       - name: Upload built artifact for future usage
         uses: actions/upload-artifact@v4.3.3
         with:
           name: sprawler-backend-artifact
-          path: $GITHUB_WORKSPACE/target/*.war
+          path: ${{env.WORKING_DIRECTORY}}/target/*.war
 
   sd-2-containerize:
     runs-on: ubuntu-latest
@@ -55,14 +53,19 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Log Working Directory as Environment Variable
+        run: |
+          echo "WORKING_DIRECTORY=$(pwd)" >> $GITHUB_ENV
+          echo "Current working directory: ${{env.WORKING_DIRECTORY}}"
+
       - name: Download built artifact
         uses: actions/download-artifact@v4
         with:
           name: sprawler-backend-artifact
-          path: $GITHUB_WORKSPACE/target
+          path: ${{env.WORKING_DIRECTORY}}/target
 
       - name: Build Docker image
-        run: docker build -t sprawler-backend:latest $GITHUB_WORKSPACE
+        run: docker build -t sprawler-backend:latest ${{env.WORKING_DIRECTORY}}
 
       - name: Upload built Docker image as artifact
         uses: actions/upload-artifact@v4.3.3
