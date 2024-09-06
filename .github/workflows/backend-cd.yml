@@ -37,13 +37,13 @@ jobs:
         run: ls -la
 
       - name: List contents
-        run: ls -la target
+        run: ls -la $GITHUB_WORKSPACE
 
       - name: Upload built artifact for future usage
         uses: actions/upload-artifact@v4.3.3
         with:
           name: sprawler-backend-artifact
-          path: ${{env.GITHUB_WORKSPACE}}/target/*.war
+          path: $GITHUB_WORKSPACE/target/*.war
 
   sd-2-containerize:
     runs-on: ubuntu-latest
@@ -61,10 +61,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: sprawler-backend-artifact
-          path: ${{env.GITHUB_WORKSPACE}}//target
+          path: $GITHUB_WORKSPACE/target
 
       - name: Build Docker image
-        run: docker build -t sprawler-backend:latest ${{env.GITHUB_WORKSPACE}}/
+        run: docker build -t sprawler-backend:latest $GITHUB_WORKSPACE
 
       - name: Upload built Docker image as artifact
         uses: actions/upload-artifact@v4.3.3
