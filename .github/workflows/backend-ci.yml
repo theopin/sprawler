@@ -175,7 +175,7 @@ jobs:
 
   si-3-containerize:
     runs-on: ubuntu-latest
-    needs: ["sd-1-build"]
+    needs: ["si-2a-junit"]
 
     defaults:
       run:
