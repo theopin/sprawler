@@ -1,9 +1,9 @@
 name: Backend Service Continuous Delivery
 
 on:
-  pull_request:
+  push:
     branches:
-      - main # Run the workflow only on pull requests to the main branch
+      - main # Run the workflow only on push to the main branch
     paths:
       - 'backend/**' # Workflow triggered on changes to code
       - '.github/workflows/backend-cd.yml'
