@@ -60,10 +60,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: sprawler-backend-artifact
-          path: $(pwd)/target
+          path: ${{env.WORKING_DIRECTORY}}/target
 
       - name: Build Docker image
-        run: docker build -t sprawler-backend:latest $(pwd)
+        run: docker build -t sprawler-backend:latest ${{env.WORKING_DIRECTORY}}
 
       - name: Upload built Docker image as artifact
         uses: actions/upload-artifact@v4.3.3
