@@ -15,7 +15,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: ./backend
+        working-directory: backend
 
     steps:
       - name: Checkout Repository
@@ -34,7 +34,7 @@ jobs:
         uses: actions/upload-artifact@v4.3.3
         with:
           name: sprawler-backend-artifact
-          path: 'backend/target/*.war'
+          path: 'target/*.war'
 
   sd-2-containerize:
     runs-on: ubuntu-latest
@@ -52,7 +52,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: sprawler-backend-artifact
-          path: ./target
+          path: target
 
       - name: Build Docker image
         run: docker build -t sprawler-backend:latest .
@@ -73,17 +73,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: sprawler-backend-docker-image
-
-#      - name: Log in to GCP Artifact Registry
-#        uses: google-github-actions/auth@v1
-#        with:
-#          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
-#
-#      - name: Push Docker image to GCP Container Registry
-#        run: |
-#          docker tag sprawler-backend:latest gcr.io/${{ secrets.GCP_PROJECT_ID }}/sprawler-backend:latest
-#          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/sprawler-backend:latest
-
 
   # Upload Docker image to AWS ECR
   sd-3b-upload-aws-ecr:
