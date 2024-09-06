@@ -34,7 +34,7 @@ jobs:
         uses: actions/upload-artifact@v4.3.3
         with:
           name: sprawler-backend-artifact
-          path: '${{ github.workspace }}/target/*.war'
+          path: '${{ inputs.working_directory }}/target/*.war'
 
   si-2a-junit:
     runs-on: ubuntu-latest
@@ -61,18 +61,18 @@ jobs:
         uses: actions/upload-artifact@v4.3.3
         with:
           name: junit-test-results
-          path: '${{ github.workspace }}/target/surefire-reports/*.xml'
+          path: '${{ inputs.working_directory }}/target/surefire-reports/*.xml'
 
       - name: Archive Coverage Report
         uses: actions/upload-artifact@v4.3.3
         with:
           name: jacoco-coverage-report
-          path: '${{ github.workspace }}/target/site/jacoco'
+          path: '${{ inputs.working_directory }}/target/site/jacoco'
 
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
-          files: '${{ github.workspace }}/target/site/jacoco/jacoco.xml'
+          files: '${{ inputs.working_directory }}/target/site/jacoco/jacoco.xml'
           fail_ci_if_error: false
 
   si-2b-codeql:
@@ -128,7 +128,7 @@ jobs:
       - name: Upload PMD analysis to Github Actions
         uses: jwgmeligmeyling/pmd-github-action@master
         with:
-          path: '${{ github.workspace }}/target/pmd.xml'
+          path: '${{ inputs.working_directory }}/target/pmd.xml'
 
   si-2d-checkstyle:
     runs-on: ubuntu-latest
@@ -154,4 +154,4 @@ jobs:
       - name: Upload Checkstyle analysis to Github Actions
         uses: jwgmeligmeyling/checkstyle-github-action@master
         with:
-          path: '${{ github.workspace }}/target/checkstyle-result.xml'
+          path: '${{ inputs.working_directory }}/target/checkstyle-result.xml'
