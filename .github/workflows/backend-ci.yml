@@ -216,7 +216,7 @@ jobs:
       - name: Check health of Docker container
         run: |
           sleep 10 # Wait for the container to initialize
-          if ! curl --fail http://localhost:8080/health; then
+          if ! curl --fail http://localhost:8080/sprawler/health; then
             echo "Health check failed"
             exit 1
           fi 
