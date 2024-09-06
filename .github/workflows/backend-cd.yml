@@ -52,7 +52,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: sprawler-backend-artifact
-          path: target/
+          path: ./target
 
       - name: Build Docker image
         run: docker build -t sprawler-backend:latest .
@@ -63,7 +63,7 @@ jobs:
           name: sprawler-backend-docker-image
           path: 'sprawler-backend:latest'
 
-  # Upload Docker image to GCP GCR
+  # Upload Docker image to GCP AR
   sd-3a-upload-gcp-gcr:
     runs-on: ubuntu-latest
     needs: ["sd-2-containerize"]
@@ -74,7 +74,7 @@ jobs:
         with:
           name: sprawler-backend-docker-image
 
-#      - name: Log in to GCP Container Registry
+#      - name: Log in to GCP Artifact Registry
 #        uses: google-github-actions/auth@v1
 #        with:
 #          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
