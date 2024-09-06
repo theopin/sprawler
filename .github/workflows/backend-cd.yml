@@ -62,14 +62,16 @@ jobs:
           name: sprawler-backend-artifact
           path: ${{env.WORKING_DIRECTORY}}/target
 
-      - name: Build Docker image
-        run: docker build -t sprawler-backend:latest ${{env.WORKING_DIRECTORY}}
+      - name: Build Docker image file
+        run: |
+          docker build -t sprawler-backend:latest ${{env.WORKING_DIRECTORY}}
+          docker save sprawler-backend:latest -o ${{env.WORKING_DIRECTORY}}/backend-docker-image.tar
 
       - name: Upload built Docker image as artifact
         uses: actions/upload-artifact@v4.3.3
         with:
           name: sprawler-backend-docker-image
-          path: 'sprawler-backend:latest'
+          path: ${{env.WORKING_DIRECTORY}}/backend-docker-image.tar
 
   # Upload Docker image to GCP AR
   sd-3a-upload-gcp-ar:
@@ -81,6 +83,11 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: sprawler-backend-docker-image
+          path: backend-docker-image.tar
+
+      - name: Load Docker image
+        run: |
+          docker load -i backend-docker-image.tar
 
   # Upload Docker image to AWS ECR
   sd-3b-upload-aws-ecr:
@@ -92,6 +99,11 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: sprawler-backend-docker-image
+          path: backend-docker-image.tar
+
+      - name: Load Docker image
+        run: |
+          docker load -i backend-docker-image.tar
 
   # Upload Docker image to Azure ACR
   sd-3c-upload-azure-acr:
@@ -103,3 +115,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: sprawler-backend-docker-image
+          path: backend-docker-image.tar
+
+      - name: Load Docker image
+        run: |
+          docker load -i backend-docker-image.tar
