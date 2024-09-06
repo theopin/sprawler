@@ -40,9 +40,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: ["sd-1-build"]
 
-    defaults:
-      run:
-        working-directory: ./backend
+#    defaults:
+#      run:
+#        working-directory: ./backend
 
     steps:
       - name: Download built artifact
