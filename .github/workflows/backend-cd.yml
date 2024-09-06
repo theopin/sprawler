@@ -36,11 +36,14 @@ jobs:
       - name: List contents
         run: ls -la
 
+      - name: List contents
+        run: ls -la target
+
       - name: Upload built artifact for future usage
         uses: actions/upload-artifact@v4.3.3
         with:
           name: sprawler-backend-artifact
-          path: '${{ inputs.working_directory }}/target/*.war'
+          path: target/*.war
 
   sd-2-containerize:
     runs-on: ubuntu-latest
@@ -59,6 +62,15 @@ jobs:
         with:
           name: sprawler-backend-artifact
           path: target
+
+      - name: Verify working directory
+        run: pwd
+
+      - name: List contents
+        run: ls -la
+
+      - name: List contents
+        run: ls -la target
 
       - name: Build Docker image
         run: docker build -t sprawler-backend:latest .
