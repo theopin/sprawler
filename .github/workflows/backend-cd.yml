@@ -70,7 +70,7 @@ jobs:
       - name: Upload built Docker image as artifact
         uses: actions/upload-artifact@v4.3.3
         with:
-          name: sprawler-backend-docker-image
+          name: backend-docker-image
           path: ${{env.WORKING_DIRECTORY}}/backend-docker-image.tar
 
   # Upload Docker image to GCP AR
@@ -82,12 +82,12 @@ jobs:
       - name: Download Docker image artifact
         uses: actions/download-artifact@v4
         with:
-          name: sprawler-backend-docker-image
-          path: backend-docker-image.tar
+          name: backend-docker-image
 
       - name: Load Docker image
         run: |
           docker load -i backend-docker-image.tar
+
 
   # Upload Docker image to AWS ECR
   sd-3b-upload-aws-ecr:
@@ -98,26 +98,26 @@ jobs:
       - name: Download Docker image artifact
         uses: actions/download-artifact@v4
         with:
-          name: sprawler-backend-docker-image
-          path: backend-docker-image.tar
+          name: backend-docker-image
 
       - name: Load Docker image
         run: |
           docker load -i backend-docker-image.tar
 
 
-
-  sd-4a-upload-gcp-cr:
+  # Deploy published image to CR
+  sd-4a-deploy-gcp-cr:
     runs-on: ubuntu-latest
     needs: ["sd-3a-upload-gcp-ar"]
 
     steps:
       - name: Download Docker image artifact
         run : |
-          echo "Deployment to ECS"
+          echo "Deployment to CR"
 
-  # Upload Docker image to AWS ECR
-  sd-4b-upload-aws-ecs:
+
+  # Deploy published image to ECS
+  sd-4b-deplpy-aws-ecs:
     runs-on: ubuntu-latest
     needs: ["sd-3b-upload-aws-ecr"]
 
