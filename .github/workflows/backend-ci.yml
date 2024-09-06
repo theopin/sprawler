@@ -142,7 +142,7 @@ jobs:
         with:
           path: ${{env.WORKING_DIRECTORY}}/target/pmd.xml
 
-  si-3c-checkstyle:
+  si-3c-scan-checkstyle:
     runs-on: ubuntu-latest
     needs: ["si-1-build"]
 
