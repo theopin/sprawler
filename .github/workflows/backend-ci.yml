@@ -10,7 +10,7 @@ on:
 
 jobs:
 
-  build-1:
+  s-1-build:
     runs-on: ubuntu-latest
 
     defaults:
@@ -30,16 +30,13 @@ jobs:
       - name: Build with Maven
         run: mvn --no-transfer-progress clean install -q -DskipTests -T 5
 
-      - name: List Directory Contents
-        run: ls -R
-
       - name: Upload built artifact for future usage
         uses: actions/upload-artifact@v4.3.3
         with:
           name: sprawler-backend-artifact
           path: 'backend/target/*.war'
 
-  junit-2-1:
+  s-2a-junit:
     runs-on: ubuntu-latest
     needs: ["build-1"]
 
@@ -78,7 +75,7 @@ jobs:
           files: 'backend/target/site/jacoco/jacoco.xml'
           fail_ci_if_error: false
 
-  codeql-2-2:
+  s-2b-codeql:
     runs-on: ubuntu-latest
     needs: ["build-1"]
 
@@ -107,7 +104,7 @@ jobs:
       - name: Analyze with CodeQL
         uses: github/codeql-action/analyze@v3
 
-  pmd-2-3:
+  s-2c-pmd:
     runs-on: ubuntu-latest
     needs: ["build-1"]
 
@@ -133,7 +130,7 @@ jobs:
         with:
           path: 'backend/target/pmd.xml'
 
-  checkstyle-2-4:
+  s-2d-checkstyle:
     runs-on: ubuntu-latest
     needs: ["build-1"]
 
