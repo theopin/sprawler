@@ -45,10 +45,17 @@ jobs:
         working-directory: ./backend
 
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
       - name: Download built artifact
         uses: actions/download-artifact@v4
         with:
           name: sprawler-backend-artifact
+          path: target/
+
+      - name: Verify file
+        run: ls -R target/
 
       - name: Build Docker image
         run: docker build -t sprawler-backend:latest .
