@@ -24,7 +24,6 @@ jobs:
       - name: Log Working Directory as Environment Variable
         run: |
           echo "WORKING_DIRECTORY=$(pwd)" >> $GITHUB_ENV
-          echo "Current working directory: ${{env.WORKING_DIRECTORY}}"
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -39,7 +38,7 @@ jobs:
         uses: actions/upload-artifact@v4.3.3
         with:
           name: sprawler-backend-artifact
-          path: ${{env.WORKING_DIRECTORY}}/target/*.war
+          path: $(pwd)/target/*.war
 
   sd-2-containerize:
     runs-on: ubuntu-latest
@@ -56,16 +55,15 @@ jobs:
       - name: Log Working Directory as Environment Variable
         run: |
           echo "WORKING_DIRECTORY=$(pwd)" >> $GITHUB_ENV
-          echo "Current working directory: ${{env.WORKING_DIRECTORY}}"
 
       - name: Download built artifact
         uses: actions/download-artifact@v4
         with:
           name: sprawler-backend-artifact
-          path: ${{env.WORKING_DIRECTORY}}/target
+          path: $(pwd)/target
 
       - name: Build Docker image
-        run: docker build -t sprawler-backend:latest ${{env.WORKING_DIRECTORY}}
+        run: docker build -t sprawler-backend:latest $(pwd)
 
       - name: Upload built Docker image as artifact
         uses: actions/upload-artifact@v4.3.3
