@@ -105,18 +105,23 @@ jobs:
         run: |
           docker load -i backend-docker-image.tar
 
-  # Upload Docker image to Azure ACR
-  sd-3c-upload-azure-acr:
+
+
+  sd-4a-upload-gcp-cr:
     runs-on: ubuntu-latest
-    needs: ["sd-2-containerize"]
+    needs: ["sd-3a-upload-gcp-ar"]
 
     steps:
       - name: Download Docker image artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: sprawler-backend-docker-image
-          path: backend-docker-image.tar
+        run : |
+          echo "Deployment to ECS"
 
-      - name: Load Docker image
-        run: |
-          docker load -i backend-docker-image.tar
+  # Upload Docker image to AWS ECR
+  sd-4b-upload-aws-ecs:
+    runs-on: ubuntu-latest
+    needs: ["sd-3b-upload-aws-ecr"]
+
+    steps:
+      - name: Download Docker image artifact
+        run : |
+          echo "Deployment to ECS"
