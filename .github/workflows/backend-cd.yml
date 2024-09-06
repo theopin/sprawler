@@ -34,7 +34,7 @@ jobs:
         uses: actions/upload-artifact@v4.3.3
         with:
           name: sprawler-backend-artifact
-          path: 'target/*.war'
+          path: '${GITHUB_WORKSPACE}/target/*.war'
 
   sd-2-containerize:
     runs-on: ubuntu-latest
