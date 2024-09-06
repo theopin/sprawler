@@ -6,7 +6,7 @@ on:
       - main # Run the workflow only on pull requests to the main branch
     paths:
       - 'backend/**' # Workflow triggered on changes to code
-      - '.github/workflows/backend_cd.yml'
+      - '.github/workflows/backend-cd.yml'
 
 jobs:
 
