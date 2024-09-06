@@ -10,7 +10,7 @@ on:
 
 jobs:
 
-  s-1-build:
+  si-1-build:
     runs-on: ubuntu-latest
 
     defaults:
@@ -36,9 +36,9 @@ jobs:
           name: sprawler-backend-artifact
           path: 'backend/target/*.war'
 
-  s-2a-junit:
+  si-2a-junit:
     runs-on: ubuntu-latest
-    needs: ["build-1"]
+    needs: ["si-1-build"]
 
     defaults:
       run:
@@ -75,9 +75,9 @@ jobs:
           files: 'backend/target/site/jacoco/jacoco.xml'
           fail_ci_if_error: false
 
-  s-2b-codeql:
+  si-2b-codeql:
     runs-on: ubuntu-latest
-    needs: ["build-1"]
+    needs: ["si-1-build"]
 
     defaults:
       run:
@@ -104,9 +104,9 @@ jobs:
       - name: Analyze with CodeQL
         uses: github/codeql-action/analyze@v3
 
-  s-2c-pmd:
+  si-2c-pmd:
     runs-on: ubuntu-latest
-    needs: ["build-1"]
+    needs: ["si-1-build"]
 
     defaults:
       run:
@@ -130,9 +130,9 @@ jobs:
         with:
           path: 'backend/target/pmd.xml'
 
-  s-2d-checkstyle:
+  si-2d-checkstyle:
     runs-on: ubuntu-latest
-    needs: ["build-1"]
+    needs: ["si-1-build"]
 
     defaults:
       run:
