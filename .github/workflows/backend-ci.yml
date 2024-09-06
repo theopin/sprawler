@@ -15,7 +15,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: ./backend
+        working-directory: backend
 
     steps:
       - name: Checkout Repository
@@ -34,7 +34,7 @@ jobs:
         uses: actions/upload-artifact@v4.3.3
         with:
           name: sprawler-backend-artifact
-          path: 'backend/target/*.war'
+          path: 'target/*.war'
 
   si-2a-junit:
     runs-on: ubuntu-latest
@@ -42,7 +42,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: ./backend
+        working-directory: backend
 
     steps:
       - name: Checkout Repository
@@ -61,18 +61,18 @@ jobs:
         uses: actions/upload-artifact@v4.3.3
         with:
           name: junit-test-results
-          path: 'backend/target/surefire-reports/*.xml'
+          path: 'target/surefire-reports/*.xml'
 
       - name: Archive Coverage Report
         uses: actions/upload-artifact@v4.3.3
         with:
           name: jacoco-coverage-report
-          path: 'backend/target/site/jacoco'
+          path: 'target/site/jacoco'
 
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
-          files: 'backend/target/site/jacoco/jacoco.xml'
+          files: 'target/site/jacoco/jacoco.xml'
           fail_ci_if_error: false
 
   si-2b-codeql:
@@ -81,7 +81,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: ./backend
+        working-directory: backend
 
     steps:
       - name: Checkout Repository
@@ -110,7 +110,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: ./backend
+        working-directory: backend
 
     steps:
       - name: Checkout Repository
@@ -128,7 +128,7 @@ jobs:
       - name: Upload PMD analysis to Github Actions
         uses: jwgmeligmeyling/pmd-github-action@master
         with:
-          path: 'backend/target/pmd.xml'
+          path: 'target/pmd.xml'
 
   si-2d-checkstyle:
     runs-on: ubuntu-latest
@@ -136,7 +136,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: ./backend
+        working-directory: backend
 
     steps:
       - name: Checkout Repository
@@ -154,4 +154,4 @@ jobs:
       - name: Upload Checkstyle analysis to Github Actions
         uses: jwgmeligmeyling/checkstyle-github-action@master
         with:
-          path: 'backend/target/checkstyle-result.xml'
+          path: 'target/checkstyle-result.xml'
