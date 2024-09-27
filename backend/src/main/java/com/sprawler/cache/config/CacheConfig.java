@@ -1,4 +1,4 @@
-package com.sprawler.cache;
+package com.sprawler.cache.config;
 
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;

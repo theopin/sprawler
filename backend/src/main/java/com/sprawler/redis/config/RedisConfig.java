@@ -1,4 +1,4 @@
-package com.sprawler.redis;
+package com.sprawler.redis.config;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
