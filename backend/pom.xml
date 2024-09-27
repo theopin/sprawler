@@ -17,18 +17,13 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.boot.version>3.3.0</spring.boot.version>
+        <maven.plugin.version>3.3.2</maven.plugin.version>
         <spring.version>6.1.8</spring.version>
         <log4j.version>2.23.1</log4j.version>
     </properties>
 
     <dependencies>
         <!-- Tomcat and Api Support -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <version>${spring.boot.version}</version>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -97,6 +92,21 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
             <version>${spring.boot.version}</version>
         </dependency>
+
+        <!--   Spring Cache Support -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
+
+        <!--   Spring Email Support     -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -120,7 +130,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>3.3.1</version>
+                <version>${maven.plugin.version}</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
@@ -157,7 +167,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.22.0</version>
+                <version>${maven.plugin.version}</version>
                 <configuration>
                     <includeTests>true</includeTests>
                     <failOnViolation>false</failOnViolation>
@@ -179,7 +189,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.3.1</version>
+                <version>${maven.plugin.version}</version>
                 <configuration>
                     <!-- Sample checkstyle file -->
                     <configLocation>src/main/resources/checkstyle.xml</configLocation>
