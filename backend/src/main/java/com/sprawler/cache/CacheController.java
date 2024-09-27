@@ -28,13 +28,13 @@ public class CacheController {
     }
 
     @GetMapping("/evict")
-    @CacheEvict(value="cache", allEntries=true)
+    @CacheEvict(value = "cache", allEntries=true)
     public String evictCache() {
         return "Cache evicted";
     }
 
     @GetMapping("/put")
-    @CachePut(value="cache")
+    @CachePut(value = "cache")
     public String putCache() {
         try {
             Thread.sleep(5000);
