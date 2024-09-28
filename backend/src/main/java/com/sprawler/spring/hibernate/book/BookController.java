@@ -12,7 +12,7 @@ import java.util.Optional;
 
 
 @RestController("bookController")
-@RequestMapping("/books")
+@RequestMapping("/spring/hibernate/books")
 public class BookController {
 
     private static final Logger LOGGER = LogManager.getLogger(BookController.class);

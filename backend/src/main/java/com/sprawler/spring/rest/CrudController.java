@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/rest")
+@RequestMapping("/spring/rest")
 public class CrudController {
 
     public static final String METHOD_TRIGGERED_MESSAGE = " method triggered";

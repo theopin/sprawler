@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/cache")
+@RequestMapping("/spring/cache")
 public class CacheController {
 
     private static final Logger LOGGER = LogManager.getLogger(CacheController.class);

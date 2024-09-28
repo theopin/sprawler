@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
-@RequestMapping("/concurrency")
+@RequestMapping("/spring/concurrency")
 public class ConcurrencyController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ConcurrencyController.class);

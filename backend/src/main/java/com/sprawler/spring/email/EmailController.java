@@ -21,7 +21,7 @@ import java.nio.file.Path;
 import java.util.Base64;
 
 @RestController
-@RequestMapping("/email")
+@RequestMapping("/spring/email")
 @PropertySource("classpath:application.properties")
 public class EmailController {
 

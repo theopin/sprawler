@@ -8,7 +8,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/redis")
+@RequestMapping("/spring/redis")
 public class RedisController {
 
     private static final Logger LOGGER = LogManager.getLogger(RedisController.class);
