@@ -1,4 +1,4 @@
-package com.sprawler.rest;
+package com.sprawler.health;
 
 
 import org.springframework.web.bind.annotation.*;
