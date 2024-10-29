@@ -197,6 +197,11 @@ jobs:
       - name: Build with Maven
         run: mvn --no-transfer-progress clean install -q -DskipTests -T 5
 
+      - name: Clean up target directory
+        run: |
+          find target -type f ! -name '*.war' -delete
+          find target -type d -empty -delete
+
       - name: List files recursively
         run: ls -R
 
@@ -204,7 +209,7 @@ jobs:
         uses: dependency-check/Dependency-Check_Action@main
         with:
           project: 'backend'
-          path: './target/*.war'
+          path: '.'
           format: 'HTML'
           out:  ${{env.WORKING_DIRECTORY}}/reports
           args: >
