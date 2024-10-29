@@ -197,8 +197,8 @@ jobs:
       - name: Run Dependency analysis
         uses: dependency-check/Dependency-Check_Action@main
         with:
-          project: ''
-          path: ${{github.workspace}}/${{env.WORKING_DIRECTORY}}
+          project: 'backend'
+          path: ${{github.workspace}}s
           format: 'HTML'
           out:  ${{env.WORKING_DIRECTORY}}/reports
           args: >
