@@ -204,7 +204,7 @@ jobs:
         uses: dependency-check/Dependency-Check_Action@main
         with:
           project: 'backend'
-          path: '.'
+          path: './target/*.war'
           format: 'HTML'
           out:  ${{env.WORKING_DIRECTORY}}/reports
           args: >
