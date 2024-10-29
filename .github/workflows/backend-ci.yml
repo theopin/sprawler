@@ -197,7 +197,6 @@ jobs:
       - name: Run Dependencies analysis
         uses: dependency-check/Dependency-Check_Action@main
         with:
-          project: 'sprawler'
           path: '.'
           format: 'HTML'
           out: 'reports' # this is the default, no need to specify unless you wish to override it
