@@ -211,7 +211,7 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: Dependency check report
-          path: ${{env.WORKING_DIRECTORY}}/reports
+          path: ${{github.workspace}}/${{env.WORKING_DIRECTORY}}/reports
 
   si-4-containerize:
     runs-on: ubuntu-latest
