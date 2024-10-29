@@ -194,10 +194,10 @@ jobs:
           java-version: 17
           distribution: 'corretto'
 
-      - name: Run Dependencies analysis
+      - name: Run Dependency analysis
         uses: dependency-check/Dependency-Check_Action@main
         with:
-          project: 'sprawler'
+          project: ''
           path: '.'
           format: 'HTML'
           out:  ${{env.WORKING_DIRECTORY}}/reports
