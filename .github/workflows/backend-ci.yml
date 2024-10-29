@@ -204,8 +204,8 @@ jobs:
           args: >
             --failOnCVSS 7
             --enableRetired
-          env:
-            JAVA_HOME: /opt/jdk
+        env:
+          JAVA_HOME: /opt/jdk
 
       - name: Upload Dependencies analysis to Github Actions
         uses: actions/upload-artifact@master
