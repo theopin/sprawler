@@ -198,7 +198,7 @@ jobs:
         uses: dependency-check/Dependency-Check_Action@main
         with:
           project: 'backend'
-          path: ${{github.workspace}}s
+          path: ${{github.workspace}}
           format: 'HTML'
           out:  ${{env.WORKING_DIRECTORY}}/reports
           args: >
