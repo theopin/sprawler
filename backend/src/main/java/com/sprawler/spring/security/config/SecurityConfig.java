@@ -1,4 +1,4 @@
-package com.sprawler.spring.security;
+package com.sprawler.spring.security.config;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -59,6 +59,7 @@ public class SecurityConfig {
                                 .permitAll())
                 .logout(logout -> logout
                         .logoutUrl("/logout") // The URL to trigger logout
+                        .logoutSuccessUrl("http://localhost:3000/login")
                         .invalidateHttpSession(true) // Invalidate session
                         .deleteCookies("JSESSIONID") // Delete cookies if needed
                         .permitAll())
