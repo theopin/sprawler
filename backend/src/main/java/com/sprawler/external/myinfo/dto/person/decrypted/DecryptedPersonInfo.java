@@ -10,50 +10,50 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DecryptedPersonInfo {
-    ValueMetadata partialuinfin;
-    ValueMetadata uinfin;
-    ValueMetadata name;
-    ValueMetadata hanyupinyinname;
-    ValueMetadata aliasname;
-    ValueMetadata hanyupinyinaliasname;
-    ValueMetadata marriedname;
+    private ValueMetadata partialuinfin;
+    private ValueMetadata uinfin;
+    private ValueMetadata name;
+    private ValueMetadata hanyupinyinname;
+    private ValueMetadata aliasname;
+    private ValueMetadata hanyupinyinaliasname;
+    private ValueMetadata marriedname;
 
-    CodeMetadata sex;
-    CodeMetadata race;
-    CodeMetadata secondaryrace;
-    CodeMetadata dialect;
-    CodeMetadata nationality;
+    private CodeMetadata sex;
+    private CodeMetadata race;
+    private CodeMetadata secondaryrace;
+    private CodeMetadata dialect;
+    private CodeMetadata nationality;
 
-    ValueMetadata dob;
-    CodeMetadata birthcountry;
-    CodeMetadata residentialstatus;
-    ValueMetadata passportnumber;
-    ValueMetadata passportexpirydate;
+    private ValueMetadata dob;
+    private CodeMetadata birthcountry;
+    private CodeMetadata residentialstatus;
+    private ValueMetadata passportnumber;
+    private ValueMetadata passportexpirydate;
 
 // regadd
 
-    CodeMetadata housingtype;
-    CodeMetadata hdbtype;
+    private CodeMetadata housingtype;
+    private CodeMetadata hdbtype;
     // hdb ownership
 
-    ValueMetadata ownerprivate;
+    private ValueMetadata ownerprivate;
     ValueMetadata email;
     // mobileno
 
-    CodeMetadata marital;
-    ValueMetadata marriagecertno;
-    CodeMetadata countryofmarriage;
-    ValueMetadata marriagedate;
-    ValueMetadata divorcedate;
+    private CodeMetadata marital;
+    private ValueMetadata marriagecertno;
+    private CodeMetadata countryofmarriage;
+    private ValueMetadata marriagedate;
+    private ValueMetadata divorcedate;
     // childrenbirthrecords
     // sponsoredchildrenrecords
 
-    ValueMetadata occupation;
-    ValueMetadata employment;
-    CodeMetadata passtype;
-    ValueMetadata passstatus;
-    ValueMetadata passexpirydate;
-    ValueMetadata employmentsector;
+    private ValueMetadata occupation;
+    private ValueMetadata employment;
+    private CodeMetadata passtype;
+    private ValueMetadata passstatus;
+    private ValueMetadata passexpirydate;
+    private ValueMetadata employmentsector;
 
     // vehicles
     // drivinglicence
