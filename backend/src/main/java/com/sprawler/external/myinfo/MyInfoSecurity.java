@@ -50,10 +50,12 @@ public class MyInfoSecurity {
         }
     }
 
-    public ECKey generateEphemeralKeys(String keyId) {
+    public ECKey generateEphemeralKeys() {
         try {
             return new ECKeyGenerator(Curve.P_256)
-                    .keyID(keyId)
+                    .keyID( RandomStringUtils.randomAlphanumeric(40))
+                    .algorithm(JWSAlgorithm.ES256)
+                    .keyUse(KeyUse.SIGNATURE)
                     .generate();
         } catch(Exception e) {
             LOGGER.error(e);
@@ -168,20 +170,16 @@ public class MyInfoSecurity {
 
             if (!flag) {
                 return null;
-            } else {
-                jwt = JWT.decode(token);
             }
+
+            return JWT.decode(token);
         } catch (Exception e) {
             LOGGER.error(e);
             return null;
         }
-
-        return jwt;
     }
 
-    public  String getPayload(String result, ECPrivateKey privateKey) {
-
-
+    public String getPayload(String result, ECPrivateKey privateKey) {
         JWEObject jweObject = null;
         try {
             // Parse JWE & validate headers

@@ -2,6 +2,7 @@ package com.sprawler.external.myinfo;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.nimbusds.jose.jwk.ECKey;
+import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.util.Base64URL;
 import com.nimbusds.oauth2.sdk.token.AccessToken;
 import com.nimbusds.oauth2.sdk.token.DPoPAccessToken;
@@ -21,10 +22,12 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.interfaces.ECPrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.text.ParseException;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.Map;
@@ -96,7 +99,7 @@ public class MyInfoController {
 
         LOGGER.info("Generating DPoP");
 
-        ECKey sessionPopKeyPair = myInfoSecurityComponent.generateEphemeralKeys(userData.get("key"));
+        ECKey sessionPopKeyPair = myInfoSecurityComponent.generateEphemeralKeys();
         String dpopString = myInfoSecurityComponent.generateDPoP(
                 tokenApiUrl,
                 "POST",
@@ -159,13 +162,21 @@ public class MyInfoController {
 
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(formParams, headers);
 
-        return myInfoTemplate.postForEntity(tokenApiUrl, requestEntity, TokenApiResponse.class).getBody();
+        TokenApiResponse tokenApiResponseObject = myInfoTemplate
+                .postForEntity(tokenApiUrl, requestEntity, TokenApiResponse.class)
+                .getBody();
+
+        byte[] byteListSessionKey = sessionPopKeyPair.toJSONString().getBytes(StandardCharsets.UTF_8);
+
+        tokenApiResponseObject.setSession_key(Base64.getEncoder().encodeToString(byteListSessionKey));
+
+        return tokenApiResponseObject;
     }
 
     @GetMapping("/person")
     public Object getPersonData(
             @RequestHeader("Authorization") String authHeader,
-            @RequestParam("key") String keyId) {
+            @RequestParam("key") String encodedSessionKey) {
 
         LOGGER.info("Running api to retrieve person data");
 
@@ -177,13 +188,30 @@ public class MyInfoController {
 
         LOGGER.info("Building DPoP string");
         AccessToken ath = new DPoPAccessToken(accessToken);
-        ECKey sessionPopKeyPair = myInfoSecurityComponent.generateEphemeralKeys(keyId);
+        ECKey sessionPopKeyPair = null;
+        try {
+            String sessionKey = new String(Base64.getDecoder().decode(encodedSessionKey), StandardCharsets.UTF_8);
+            sessionPopKeyPair =(ECKey) JWK.parse(sessionKey);
+        } catch (ParseException e) {
+            LOGGER.error(e);
+        }
         String dpopString = myInfoSecurityComponent
                 .generateDPoP(personApiUrl,
                         "GET",
                         sessionPopKeyPair,
                         ath,
                         tokenJWT.getSubject());
+
+
+
+
+
+
+
+
+
+
+
 
         // Set up headers
         HttpHeaders headers = new HttpHeaders();
@@ -200,7 +228,8 @@ public class MyInfoController {
                 .toUriString();
 
         LOGGER.info(personUri);
-        LOGGER.info(headers);
+        LOGGER.info(headers.get("Authorization"));
+        LOGGER.info(headers.get("DPoP"));
 
         return myInfoTemplate.getForEntity(
                 personUri,
