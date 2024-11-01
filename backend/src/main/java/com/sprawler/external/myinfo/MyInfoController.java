@@ -1,14 +1,12 @@
 package com.sprawler.external.myinfo;
 
-import com.nimbusds.jose.jwk.Curve;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.nimbusds.jose.jwk.ECKey;
-import com.nimbusds.jose.jwk.gen.ECKeyGenerator;
 import com.nimbusds.jose.util.Base64URL;
 import com.nimbusds.oauth2.sdk.token.AccessToken;
 import com.nimbusds.oauth2.sdk.token.DPoPAccessToken;
 import com.sprawler.external.myinfo.dto.person.decrypted.DecryptedPersonInfo;
 import com.sprawler.external.myinfo.dto.token.TokenApiResponse;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +18,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.security.KeyFactory;
@@ -39,7 +38,7 @@ public class MyInfoController {
     private static final String authApiUrl = "https://test.api.myinfo.gov.sg/com/v4/authorize";
     private static final String tokenApiUrl = "https://test.api.myinfo.gov.sg/com/v4/token";
     private static final String personApiUrl = "https://test.api.myinfo.gov.sg/com/v4/person";
-    private static final String clientId = "test3";
+    private static final String clientId = "STG2-MYINFO-SELF-TEST";
     private static final String scope = "uinfin name sex race nationality dob email mobileno regadd housingtype hdbtype marital edulevel noa-basic ownerprivate cpfcontributions cpfbalances";
 
 
@@ -51,7 +50,7 @@ public class MyInfoController {
 
     private static final String grantType = "authorization_code";
     private static final String clientAssertionType = "urn:ietf:params:oauth:client-assertion-type:jwt-bearer";
-    private static final String keyId = "test";
+    private static final String keyId = "aQPyZ72NM043E4KEioaHWzixt0owV99gC9kRK388WoQ";
 
     @Autowired
     @Qualifier("myInfoSecurityComponent")
@@ -71,12 +70,12 @@ public class MyInfoController {
     }
 
     @GetMapping("/authorize")
-    public String makeAuthorizeCall(@RequestParam("verifier") String verifier) {
+    public RedirectView makeAuthorizeCall(@RequestParam("verifier") String verifier) {
         LOGGER.info("Making api call to authorize data");
 
         String codeChallenge = myInfoSecurityComponent.createCodeChallenge(verifier);
 
-        return UriComponentsBuilder
+        String redirectUrl = UriComponentsBuilder
                 .fromHttpUrl(authApiUrl)
                 .queryParam("code_challenge", codeChallenge)
                 .queryParam("client_id", clientId)
@@ -86,6 +85,8 @@ public class MyInfoController {
                 .queryParam("code_challenge_method", codeChallengeMethod)
                 .queryParam("purpose_id", purposeId)
                 .toUriString();
+
+        return new RedirectView(redirectUrl);
     }
 
     @PostMapping(path = "/token", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -95,7 +96,7 @@ public class MyInfoController {
 
         LOGGER.info("Generating DPoP");
 
-        ECKey sessionPopKeyPair = myInfoSecurityComponent.generateEphemeralKeys();
+        ECKey sessionPopKeyPair = myInfoSecurityComponent.generateEphemeralKeys(userData.get("key"));
         String dpopString = myInfoSecurityComponent.generateDPoP(
                 tokenApiUrl,
                 "POST",
@@ -108,7 +109,7 @@ public class MyInfoController {
         try {
             jktThumbprint = sessionPopKeyPair.toPublicJWK().computeThumbprint("SHA-256");
 
-            String privateKeyStr = "test";
+            String privateKeyStr = "MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgZw4GTT/we1cBHxeRKKcalUTgZOZs9CeOSEY74D5Cs9qgCgYIKoZIzj0DAQehRANCAAQFdRarRnZFEWquVZtbaa4jJs2eP9gHF+U1BMQ6D5CYJL1zuBuMg6NIjlSQM5hFsiGcF8J0pxsTyK2Xu0l9Dyru";
 
             byte[] keyBytes = Base64.getDecoder().decode(privateKeyStr);
 
@@ -161,24 +162,28 @@ public class MyInfoController {
         return myInfoTemplate.postForEntity(tokenApiUrl, requestEntity, TokenApiResponse.class).getBody();
     }
 
-    @GetMapping("/person/{id}")
-    public DecryptedPersonInfo getPersonDataFromSandbox(
-            @PathVariable("id") String id,
-            @RequestHeader("Authorization") String accessToken,
-            @RequestHeader("DPoP") String dpopToken) {
+    @GetMapping("/person")
+    public Object getPersonData(
+            @RequestHeader("Authorization") String authHeader,
+            @RequestParam("key") String keyId) {
 
         LOGGER.info("Running api to retrieve person data");
 
-        AccessToken ath = new DPoPAccessToken(accessToken);
+        LOGGER.info("Decoding provided auth token");
+        String accessToken = authHeader.split(" ")[1];
+        String jwksUrl = "https://test.authorise.singpass.gov.sg/.well-known/keys.json";
+        DecodedJWT tokenJWT = myInfoSecurityComponent
+                .decodeJwtToken(accessToken, jwksUrl);
 
-        //Creates a new DPoP proof
-        ECKey sessionPopKeyPair = myInfoSecurityComponent.generateEphemeralKeys();
+        LOGGER.info("Building DPoP string");
+        AccessToken ath = new DPoPAccessToken(accessToken);
+        ECKey sessionPopKeyPair = myInfoSecurityComponent.generateEphemeralKeys(keyId);
         String dpopString = myInfoSecurityComponent
                 .generateDPoP(personApiUrl,
                         "GET",
                         sessionPopKeyPair,
                         ath,
-                        id);
+                        tokenJWT.getSubject());
 
         // Set up headers
         HttpHeaders headers = new HttpHeaders();
@@ -186,18 +191,20 @@ public class MyInfoController {
         headers.set("DPoP", dpopString);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
-        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
-
+        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(headers);
 
         // Build URI with path parameter
         String personUri = UriComponentsBuilder.fromUriString(personApiUrl)
-                .pathSegment(id)
+                .pathSegment(tokenJWT.getSubject())
                 .queryParam("scope", scope)
                 .toUriString();
 
+        LOGGER.info(personUri);
+        LOGGER.info(headers);
+
         return myInfoTemplate.getForEntity(
                 personUri,
-                DecryptedPersonInfo.class,
+                Object.class,
                 requestEntity).getBody();
     }
 }

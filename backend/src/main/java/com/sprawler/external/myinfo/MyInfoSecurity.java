@@ -3,6 +3,7 @@ package com.sprawler.external.myinfo;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.nimbusds.jose.*;
+import com.nimbusds.jose.crypto.ECDHDecrypter;
 import com.nimbusds.jose.crypto.ECDSASigner;
 import com.nimbusds.jose.crypto.factories.DefaultJWSSignerFactory;
 import com.nimbusds.jose.crypto.factories.DefaultJWSVerifierFactory;
@@ -12,6 +13,7 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.jwk.source.JWKSourceBuilder;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.nimbusds.jose.util.Base64URL;
+import com.nimbusds.jwt.EncryptedJWT;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import com.nimbusds.oauth2.sdk.dpop.DPoPUtils;
@@ -48,10 +50,10 @@ public class MyInfoSecurity {
         }
     }
 
-    public ECKey generateEphemeralKeys() {
+    public ECKey generateEphemeralKeys(String keyId) {
         try {
             return new ECKeyGenerator(Curve.P_256)
-                    .keyID(RandomStringUtils.randomAlphanumeric(40))
+                    .keyID(keyId)
                     .generate();
         } catch(Exception e) {
             LOGGER.error(e);
@@ -137,7 +139,7 @@ public class MyInfoSecurity {
         }
     }
 
-    public static DecodedJWT decodeJwtToken(String token, String url) {
+    public DecodedJWT decodeJwtToken(String token, String url) {
 
         // The URL to the JWKS endpoint
         URL jwksUrl;
@@ -162,9 +164,8 @@ public class MyInfoSecurity {
             JWSVerifier verifier = new DefaultJWSVerifierFactory().createJWSVerifier(jwsObj.getHeader(),
                     jwk.get(0).toECKey().toECPublicKey());
 
-            Boolean flag = false;
+            boolean flag = jwsObj.verify(verifier);
 
-            flag = jwsObj.verify(verifier);
             if (!flag) {
                 return null;
             } else {
@@ -176,5 +177,25 @@ public class MyInfoSecurity {
         }
 
         return jwt;
+    }
+
+    public  String getPayload(String result, ECPrivateKey privateKey) {
+
+
+        JWEObject jweObject = null;
+        try {
+            // Parse JWE & validate headers
+            jweObject = EncryptedJWT.parse(result);
+
+            // Set PrivateKey and Decrypt
+            JWEDecrypter decrypter = new ECDHDecrypter(privateKey);
+            jweObject.decrypt(decrypter);
+
+        } catch (Exception e) {
+            LOGGER.error(e);
+        }
+        // Get String Payload
+
+        return jweObject.getPayload().toString();
     }
 }
