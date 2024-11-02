@@ -44,7 +44,7 @@ public class MyInfoSecurity {
             byte[] mdDigest = sha256messageDigester.digest();
 
             return Base64.getUrlEncoder().withoutPadding().encodeToString(mdDigest);
-        } catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.error(e);
             return null;
         }
@@ -57,7 +57,7 @@ public class MyInfoSecurity {
                     .algorithm(JWSAlgorithm.ES256)
                     .keyUse(KeyUse.SIGNATURE)
                     .generate();
-        } catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.error(e);
             return null;
         }
@@ -87,7 +87,7 @@ public class MyInfoSecurity {
                     .expirationTime(exp);
 
             if (ath != null) {
-                uri = new URI(url+"/"+uuid);
+                uri = new URI(url + "/" + uuid);
                 builder = builder.claim("ath", DPoPUtils.computeSHA256(ath).toString())
                         .claim("htu", uri.toString());
             } else {
@@ -105,7 +105,7 @@ public class MyInfoSecurity {
 
             return proof.serialize();
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.error(e);
             return null;
         }

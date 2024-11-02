@@ -1,5 +1,6 @@
 package com.sprawler.external.myinfo.dto.person.decrypted;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sprawler.external.myinfo.dto.person.decrypted.base.CodeMetadata;
 import com.sprawler.external.myinfo.dto.person.decrypted.base.ValueMetadata;
 import lombok.*;
@@ -9,6 +10,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DecryptedPersonInfo {
     private ValueMetadata partialuinfin;
     private ValueMetadata uinfin;
