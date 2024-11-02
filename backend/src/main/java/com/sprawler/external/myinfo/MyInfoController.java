@@ -2,7 +2,6 @@ package com.sprawler.external.myinfo;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.nimbusds.jose.jwk.ECKey;
-import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.util.Base64URL;
 import com.nimbusds.oauth2.sdk.token.AccessToken;
 import com.nimbusds.oauth2.sdk.token.DPoPAccessToken;
@@ -14,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -22,12 +22,10 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.interfaces.ECPrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
-import java.text.ParseException;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.Map;
@@ -57,7 +55,7 @@ public class MyInfoController {
 
     @Autowired
     @Qualifier("myInfoSecurityComponent")
-    private MyInfoSecurity myInfoSecurityComponent;
+    private MyInfoSecurity myInfoSecurity;
 
     @Autowired
     @Qualifier("myInfoTemplate")
@@ -76,7 +74,7 @@ public class MyInfoController {
     public RedirectView makeAuthorizeCall(@RequestParam("verifier") String verifier) {
         LOGGER.info("Making api call to authorize data");
 
-        String codeChallenge = myInfoSecurityComponent.createCodeChallenge(verifier);
+        String codeChallenge = myInfoSecurity.createCodeChallenge(verifier);
 
         String redirectUrl = UriComponentsBuilder
                 .fromHttpUrl(authApiUrl)
@@ -99,8 +97,8 @@ public class MyInfoController {
 
         LOGGER.info("Generating DPoP");
 
-        ECKey sessionPopKeyPair = myInfoSecurityComponent.generateEphemeralKeys();
-        String dpopString = myInfoSecurityComponent.generateDPoP(
+        ECKey sessionPopKeyPair = myInfoSecurity.generateEphemeralKeys();
+        String dpopString = myInfoSecurity.generateDPoP(
                 tokenApiUrl,
                 "POST",
                 sessionPopKeyPair,
@@ -132,7 +130,7 @@ public class MyInfoController {
         assert jktThumbprint != null;
 
         LOGGER.info("Generating Client Assertion");
-        String clientAssertion = myInfoSecurityComponent
+        String clientAssertion = myInfoSecurity
                 .generateClientAssertion(
                         tokenApiUrl,
                         clientId,
@@ -166,59 +164,45 @@ public class MyInfoController {
                 .postForEntity(tokenApiUrl, requestEntity, TokenApiResponse.class)
                 .getBody();
 
-        byte[] byteListSessionKey = sessionPopKeyPair.toJSONString().getBytes(StandardCharsets.UTF_8);
 
-        tokenApiResponseObject.setSession_key(Base64.getEncoder().encodeToString(byteListSessionKey));
-
-        return tokenApiResponseObject;
-    }
-
-    @GetMapping("/person")
-    public Object getPersonData(
-            @RequestHeader("Authorization") String authHeader,
-            @RequestParam("key") String encodedSessionKey) {
-
-        LOGGER.info("Running api to retrieve person data");
-
-        LOGGER.info("Decoding provided auth token");
-        String accessToken = authHeader.split(" ")[1];
+        LOGGER.info("Decoding provided auth token to extract details");
         String jwksUrl = "https://test.authorise.singpass.gov.sg/.well-known/keys.json";
-        DecodedJWT tokenJWT = myInfoSecurityComponent
-                .decodeJwtToken(accessToken, jwksUrl);
+        DecodedJWT tokenJWT = myInfoSecurity
+                .decodeJwtToken(tokenApiResponseObject.getAccess_token(), jwksUrl);
 
-        LOGGER.info("Building DPoP string");
-        AccessToken ath = new DPoPAccessToken(accessToken);
-        ECKey sessionPopKeyPair = null;
-        try {
-            String sessionKey = new String(Base64.getDecoder().decode(encodedSessionKey), StandardCharsets.UTF_8);
-            sessionPopKeyPair =(ECKey) JWK.parse(sessionKey);
-        } catch (ParseException e) {
-            LOGGER.error(e);
-        }
-        String dpopString = myInfoSecurityComponent
+        LOGGER.info("Generating dPOP key string to ");
+        AccessToken ath = new DPoPAccessToken(tokenApiResponseObject.getAccess_token());
+        String dpopPersonString = myInfoSecurity
                 .generateDPoP(personApiUrl,
                         "GET",
                         sessionPopKeyPair,
                         ath,
                         tokenJWT.getSubject());
 
+        tokenApiResponseObject.setDpop_string(dpopPersonString);
 
+        return tokenApiResponseObject;
+    }
 
+    @GetMapping("/person")
+    public String getPersonData(
+            @RequestHeader("Authorization") String authHeader,
+            @RequestParam("dpop_string") String dPoPString) {
 
+        LOGGER.info("Running api to retrieve person data");
 
+        LOGGER.info("Decoding provided auth token");
+        String accessToken = authHeader.split(" ")[1];
+        String jwksUrl = "https://test.authorise.singpass.gov.sg/.well-known/keys.json";
 
+        DecodedJWT tokenJWT = myInfoSecurity
+                .decodeJwtToken(accessToken, jwksUrl);
 
-
-
-
-
-
+        LOGGER.info("Building Request Headers for Person API");
         // Set up headers
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "DPoP " + accessToken);
-        headers.set("DPoP", dpopString);
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-
+        headers.set("DPoP", dPoPString);
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(headers);
 
         // Build URI with path parameter
@@ -231,9 +215,57 @@ public class MyInfoController {
         LOGGER.info(headers.get("Authorization"));
         LOGGER.info(headers.get("DPoP"));
 
-        return myInfoTemplate.getForEntity(
+        String encryptedResponse = "eyJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiRUNESC1FUytBMjU2S1ciLCJraWQiOiI3VGt5TWFqV0JYUlo3aVpmZ3lQUGZmMmdMMzloMlh0ZkpEemNzNXRjZXJNIiwiZXBrIjp7Imt0eSI6IkVDIiwiY3J2IjoiUC0yNTYiLCJ4IjoiMHBwczBTMU5tTlZRaFdBQ1hXTU9JVVN1aVpNSUJqMy1qem5WOVJSSGtzSSIsInkiOiJzc0kyaWZTVEVqRnhWa0tRWUFSLW5yMFFuVVN6b2F4VC1QMUMxNWJsSWtjIn19.FhcMB_6gqrGt898Pq3W1FsssOktF5m3wP6qvIYX31o98-t9dP9q7IQ.6g8XwLlrPQaURfiT.TDi5V136ShNeWxHHvruhaQmCYKo6me28FTvDpuwpOaA2JZV3G1KOTG78grCmS32iygV5CLnuB7pBggs4Qr8xrZoiPyiC-KyW0lN5kv8qpSiWwUsh0XZlGre85_WyfSrpv7khausCRLAJfpCQvrxaNRJCdMr1nr9WvmPDSYG4HoFu_KmaSwGiSO_pRDFkN-WsXjdJqnufIaZRlYD9EAe0xJrqt2jEYwnnemGnsykfjTx5mN6TA9OkKKO39iYp5kboIqZazbLLwHvLJs_JUAaJm6bb6JXnd70VaVknkraA-sExq272qpFJORb1zph8EwOaParJuo59C_V9TZcmVW5kTSIrYI7RONoWn_k.CPCS8Li8UZr14g3DaAfezQ";
+        try {
+             encryptedResponse = myInfoTemplate.exchange(
                 personUri,
-                Object.class,
-                requestEntity).getBody();
+                HttpMethod.GET,
+                requestEntity,
+                String.class
+                ).getBody();
+        } catch (Exception e) {
+            LOGGER.error(e);
+
+        }
+
+
+
+        LOGGER.info("String obtained. Attempting to decrypt");
+        String encryptionPrivateKeyString = "MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgOvpIsduu5J9C4s7G9zqcAvfD78OD0LemB7Voa5nyufagCgYIKoZIzj0DAQehRANCAAQ18jEm50E7X9cPgOeGRUo+ice7HQsbXY7cP5nY1+y4QdhxunsiXBBAVWVKdWJReey1jJQCJskrjecEHHhK5qPf";
+
+        LOGGER.info("Loading Private Key");
+        ECPrivateKey encryptionPrivateKey = null;
+        try {
+
+
+            byte[] keyBytes = Base64.getDecoder().decode(encryptionPrivateKeyString);
+
+            // Step 2: Convert to PKCS8EncodedKeySpec
+            PKCS8EncodedKeySpec  keySpec = new PKCS8EncodedKeySpec(keyBytes);
+
+            // Step 3: Generate ECPrivateKey from KeyFactory
+            KeyFactory keyFactory = KeyFactory.getInstance("EC");
+            PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
+
+            // Return as ECPrivateKey
+            encryptionPrivateKey = (ECPrivateKey) privateKey;
+        } catch (Exception e) {
+            LOGGER.error(e);
+        }
+
+        LOGGER.info("Extracting payload");
+        String payload = myInfoSecurity.getPayload(encryptedResponse, encryptionPrivateKey);
+
+        DecodedJWT personJWT = myInfoSecurity.decodeJwtToken(payload, jwksUrl);
+        LOGGER.info(new String (Base64.getDecoder().decode(personJWT.getHeader())));
+        LOGGER.info(new String (Base64.getDecoder().decode(personJWT.getPayload())));
+
+        LOGGER.info("Formatting result");
+
+        // Convert byte[] to String
+        byte[] base64Decode = Base64.getDecoder().decode(personJWT.getPayload());
+        String decryptedPersonApiResponse = new String(base64Decode);
+
+        return decryptedPersonApiResponse;
     }
 }

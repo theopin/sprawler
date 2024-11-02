@@ -14,7 +14,7 @@ public class TokenApiResponse {
     private String refresh_token;
     private String client_assertion;
     private String scope;
-    private String session_key;
+    private String dpop_string;
 
 
 }
