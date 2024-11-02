@@ -127,6 +127,7 @@
             <version>${spring.boot.version}</version>
         </dependency>
 
+
         <!--  MyInfo Security Support -->
         <dependency>
             <groupId>com.nimbusds</groupId>
@@ -155,6 +156,12 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson-databind.version}</version>
+
+        <!--   Spring Security Support     -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <version>${spring.boot.version}</version>
         </dependency>
 
     </dependencies>
