@@ -3,7 +3,7 @@ package com.sprawler.health;
 
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@RestController("healthController")
 @RequestMapping("/health")
 public class HealthController {
 
