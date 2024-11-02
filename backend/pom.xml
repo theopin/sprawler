@@ -31,7 +31,7 @@
         <oauth2-oidc.version>10.4</oauth2-oidc.version>
         <java-jwt.version>4.4.0</java-jwt.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>
-        <jackson-databind.version>2.15.2</jackson-databind.version>
+        <jackson-databind.version>2.18.1</jackson-databind.version>
 
         <!-- plugins version-->
         <maven-war.version>3.3.1</maven-war.version>
