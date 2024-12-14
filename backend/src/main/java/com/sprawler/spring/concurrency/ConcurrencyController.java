@@ -22,7 +22,7 @@ public class ConcurrencyController {
     @Async
     @GetMapping("/async/task")
     public CompletableFuture<String> triggerAsyncTask() {
-        LOGGER.info("Executing async task");
+        LOGGER.debug("Executing async task");
         try {
             Thread.sleep(3000); // Simulate a long-running task
         } catch (InterruptedException e) {
@@ -34,11 +34,11 @@ public class ConcurrencyController {
 
     @Scheduled(fixedRate = 5000) // Executes every 5 seconds independently
     public void runScheduledFixedRateTask() {
-        LOGGER.info("Executing scheduled task every 5 seconds");
+        LOGGER.debug("Executing scheduled task every 5 seconds");
     }
 
     @Scheduled(fixedDelay = 1000) // Executes 1 s after conclusion of previous task
     public void runScheduledFixedDelayTask() {
-        LOGGER.info("Executing task every after delay");
+        LOGGER.debug("Executing task every after delay");
     }
 }

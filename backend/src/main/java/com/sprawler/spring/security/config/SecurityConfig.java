@@ -8,11 +8,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -42,13 +45,34 @@ public class SecurityConfig {
         return userManager;
     }
 
+    @Bean("corsConfig")
+    public UrlBasedCorsConfigurationSource setCorsConfiguration() {
+        CorsConfiguration corsConfig = new CorsConfiguration();
+        corsConfig.addAllowedOrigin("http://localhost:3001");
+        corsConfig.addAllowedOriginPattern("*");
+        corsConfig.addAllowedMethod("POST");
+        corsConfig.addAllowedMethod("GET");
+        corsConfig.addAllowedHeader("*");
+        corsConfig.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource sourceConfig = new UrlBasedCorsConfigurationSource();
+        sourceConfig.registerCorsConfiguration("/**", corsConfig); // Apply to all paths
+
+        return sourceConfig;
+    }
+
+
     @Bean("filterChain")
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http,
+                                           @Qualifier("corsConfig") UrlBasedCorsConfigurationSource corsSourceConfig) throws Exception {
         return http
-                .csrf(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
+                .cors(cors -> cors.configurationSource(corsSourceConfig)) // Use custom CORS configuration
                 .authorizeHttpRequests(authorize -> authorize
                                 .requestMatchers("/health")
+                                .permitAll()
+                                .requestMatchers("/myinfo/token")
                                 .permitAll()
                                 .requestMatchers("/spring/security/user")
                                 .hasRole("USER")
@@ -58,7 +82,7 @@ public class SecurityConfig {
                                 .permitAll())
                 .logout(logout -> logout
                         .logoutUrl("/logout") // The URL to trigger logout
-                        .logoutSuccessUrl("http://localhost:3000/login")
+                        .logoutSuccessUrl("http://localhost:3001/login")
                         .invalidateHttpSession(true) // Invalidate session
                         .deleteCookies("JSESSIONID") // Delete cookies if needed
                         .permitAll())
