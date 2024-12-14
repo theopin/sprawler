@@ -21,6 +21,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.interfaces.ECPrivateKey;
@@ -204,17 +207,20 @@ public class MyInfoController {
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(headers);
 
         // Build URI with path parameter
-        String personUri = UriComponentsBuilder.fromUriString(personApiUrl)
-                .pathSegment(tokenJWT.getSubject())
-                .queryParam("scope", scope)
-                .toUriString();
 
-        LOGGER.info(personUri);
-        LOGGER.info(headers.get("Authorization"));
-        LOGGER.info(headers.get("DPoP"));
 
-        String encryptedResponse = "eyJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiRUNESC1FUytBMjU2S1ciLCJraWQiOiI3VGt5TWFqV0JYUlo3aVpmZ3lQUGZmMmdMMzloMlh0ZkpEemNzNXRjZXJNIiwiZXBrIjp7Imt0eSI6IkVDIiwiY3J2IjoiUC0yNTYiLCJ4IjoibUVaMHhpRmQ4SV9nbERTVDRYWHZaUTgwN2E4X1lpN0ZaYkxmdnhZUEtJZyIsInkiOiJoNEEtOV9tYndJeVQ3UlVnVzNBVV9fQjg2TFYyWUhTWFlZN1l6ekEtX2NjIn19.-tkyW9doM-nvfi5iLIX30livPwFb4Ocpj_sH9lf3EBT_665a4obEiQ.YInOs5ZA_wA0kfAA.ESz3K9C-K7BUtifjT-sLlam7sddzAmpfW0QeF5oDrDYOLJXwgwCYbZCwXP7BBkI0TbccTdatQja76Vs2Y-OWsSDS-AOvg46HWUmUkSnzQAREJ_fxPGhDhDLvmBwLl4Y64zVOHDwZFC9dfnJAH8_2ezM03kqatw1gjs5gmipaicdoGZNA3doy33J6W2uAnjl6eunw47ABlu1PKdizumYnISZjPYWxIGLI3BMSfQSo9arvXT9R7sodhmVMb_KlRG9tnbqazvXwjafRs4B9moT7a2pTNts2hVKZ72Oknl-YpED4pkmx7IoV8CUHU0JIrtAnD_fkZlAl1zUSYtJgy7EXJ11T-UktkBWGzXswQQm913YV0ZYiwBkK80exOoGq-40YTDcFnhAqAJQW3N7Ro2nX4Mk4ujBxtxB-j25rtYmIG1-lU0MPepTzFrTLupzrslkPHyfW8a5LystczDLPH7ryCYUAKw1ex87Wbf784mmkd62QfxLjAhvK3fHh0MA_naOBoIzX89o7B2EjAZ015YJvsIKRPb2JM-Y1_Ll5mFmxttMk17ItjDfcxCqQE9dU_4_X3Z8A6LW0HOSMjrIop-9WvmWKCK3DzpgWw_x4H7dlbTPsOKM7cVnP8_LqNMSmmxjskJeBZ4XMOG9G273RvrZbgA8POS0zESTvkrwULTwPFr4fsfDP8t82WWBzsuwuXXNqE_BE-McfoyZJZ-a6iWbMyp8b3CSrLj5neCYHQSGJ14ZJagfOoz8BgTzqJxUoeQdg6K14bdP2Wdwu32q207al7riw35tFU45WFy8lUuIKURsznadUeyG1GzBJ6Rl7zjVmFmtGReawCbGrFLZDxkHl6520YbDVHqnjHbBX4vnneoISdx3YhSHdd08rHNSOPPOrbpv22bWsLCr-6PKZzzM9XG4J4oloDxwMZgwJ-fmExlCwRml9aywlEArbs0UqLdjC9mtngNb4Sw1kNhUleVzXRD3qkKZj1Zzzei-oHN-LEz9hWVMtAdy-bpuq8eVYt437Td2IQnCMQ-f3hA8FqaASLVlfjrbNm0GwRQpki3s6hA2FlUEXlE3RGyOYB9Z9jyf8AB1WQ9QfWpOPUNKlf8pmqS7f-Ym0EVabTFtTT-QNHXWo5CAQ1RZ7K_sxmiLSiMsE-V6V7DFjq0b7bXPiCFbKAyJW21gC_t_G8Shg7nzXtxKY2YEOCFMOjn-RsnQAWYlJZ9sCpiL3PoueLdK2ouAq9KebqpP-syM8jlwTh6ZrL8k_InYCSZAWvCRdqf85hu4qoKxTFd7biVpeJQ1fQb9sLGHihSMx3_kOOsS-OUctuVy_nElcuFaVy4vGk6bjDetED8egwwQZn3oRtbrQeye0filIYw_hcJyXzwNzGKUox7C8aIV6-Mi4x0fJTQPPJrJyEU4fSJC9auGOi75CWPQOf-Kd8GOpr8vLQ8FULaPB3S1zVfhXN7q08Qcp_MolotPPFfBhn7VMM7ai5JG4vhB-oti3gsih4xaIDiYK98Nitqp_OnY34keiEjzxWL8PQJugTyXiGuM6Gft-Xu07OrOzYC-CqtX7QOUhLSSQefP1HhyvuSAocCvgWQ2Q7EydphmlCJAgzlIwXtePcQ-YKqM_bbJ5TZmD_of4T9-Ab-VwNdgcor_Ro1rq3c6zbzTsKxaJ1SeHRSzIfyfz854TbZd4PiJwERYp4dSt-I-sPW21h90CJXCujS--2QzgVeOkSHlUI94dkl54-ahiKd8UlnU_N24_uVsiVYpqkh2Ouce8uy9FRQAL6ZRh5bOC78GWKQEyMvMDWEZl8myrlSiKWm4OFH65hiBZx6uoNIramaMKQNVZOMFLiTUCOoqJc_Xk-LrNzh7FNdfzP9NgbqfPdwKwVeuy4lWLttYOq2UHXVIU_u4aHEjkUuGVO0O2Fz_Ig_pIyTSIQGkhTC7MQjzWfMTuUCPphh4x7bO74VzqprsN35TxxOVvD9iTpDZ-kg5fJ53j2f5G413q8JmCMHhf3rqX7N8bPTHXlkvHoeCMwc7TMyU4ugJOzxQgMqoO78iWHhr4PxriotwB3vvnvzMsg4fVPRzwUWiD_adBhWB_ZZOnoxQHftb9fmcIP6DGyNne11_4VsuIPmifdSDixBVV6AOk39hkQDbBMQctGPat2TXVo8kl3vg_sgqkTDobccEWT5YnQ3XRpQCrD7V9Z5P9u64_rSeFxz1dBLFHe39sytwFtJT-NzhDAN_5UWyNln5uS-R5WtNARjP5b7W50oQntUql1smZiH3o-xqittFs-QoPeH94D5qtLUpK-XF1fWFJrNaL_GhVBkH0S56fYGfceDs-JZ73AePN5lNbFBVLVuA55QMzBHM_Y8k7zcu6cWIRa15z3UdariVcGXsaurFfTYpP0ABmKtJPbBotEEBWb-N7gvdXuH25MLpEXtqjh6GLXcuRMwIUeQ9mcQKFjh2tJF0jf4kEnMsVs9XtK8pO47owp0TAR1iLre80ryuLcbaSoj_Cm4T5IJORuURKftjfQsoC9NMpPLV8dJrBT0hjv2QgZrQmjyZ1lZwZa1cjVy2_o72epuJsdSgf_aSJ1Pq7ucHnr9WnOmvlwU0IWQ.bjsOSR3XIMI6WMNkJ2gCqg";
+        String encryptedResponse = "";
         try {
+            String personUri = UriComponentsBuilder
+                    .fromHttpUrl(personApiUrl)
+                    .pathSegment(tokenJWT.getSubject())
+                    .queryParam("scope", URLEncoder.encode(scope, StandardCharsets.UTF_8))
+                    .toUriString();
+
+            LOGGER.info(personUri);
+            LOGGER.info(headers.get("Authorization"));
+            LOGGER.info(headers.get("DPoP"));
+
              encryptedResponse = myInfoTemplate.exchange(
                 personUri,
                 HttpMethod.GET,
