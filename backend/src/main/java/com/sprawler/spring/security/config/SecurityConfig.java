@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -47,7 +46,7 @@ public class SecurityConfig {
     }
 
     @Bean("corsConfig")
-    public UrlBasedCorsConfigurationSource setCorsConfiguration(){
+    public UrlBasedCorsConfigurationSource setCorsConfiguration() {
         CorsConfiguration corsConfig = new CorsConfiguration();
         corsConfig.addAllowedOrigin("http://localhost:3001");
         corsConfig.addAllowedOriginPattern("*");
@@ -66,7 +65,6 @@ public class SecurityConfig {
     @Bean("filterChain")
     public SecurityFilterChain filterChain(HttpSecurity http,
                                            @Qualifier("corsConfig") UrlBasedCorsConfigurationSource corsSourceConfig) throws Exception {
-
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
