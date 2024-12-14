@@ -13,10 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
@@ -72,7 +69,7 @@ public class MyInfoController {
     }
 
     @GetMapping("/authorize")
-    public RedirectView makeAuthorizeCall(@RequestParam("verifier") String verifier) {
+    public ResponseEntity<String> makeAuthorizeCall(@RequestParam("verifier") String verifier) {
         LOGGER.info("Making api call to authorize data");
 
         String codeChallenge = myInfoSecurity.createCodeChallenge(verifier);
@@ -88,7 +85,8 @@ public class MyInfoController {
                 .queryParam("purpose_id", purposeId)
                 .toUriString();
 
-        return new RedirectView(redirectUrl);
+        // Return the redirect URL as a plain string response
+        return ResponseEntity.ok(redirectUrl);
     }
 
     @PostMapping(path = "/token", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -187,13 +185,12 @@ public class MyInfoController {
 
     @GetMapping("/person")
     public DecryptedPersonInfo getPersonData(
-            @RequestHeader("Authorization") String authHeader,
+            @RequestParam("access_token") String accessToken,
             @RequestParam("dpop_string") String dPoPString) {
 
         LOGGER.info("Running api to retrieve person data");
 
         LOGGER.info("Decoding provided auth token");
-        String accessToken = authHeader.split(" ")[1];
         String jwksUrl = "https://test.authorise.singpass.gov.sg/.well-known/keys.json";
 
         DecodedJWT tokenJWT = myInfoSecurity
