@@ -9,7 +9,7 @@ const instance = axios.create({
 })
 
 await RequestInterceptor.setRequestInterceptor(instance)
-await RequestInterceptor.setResponseInterceptor(instance)
+// await RequestInterceptor.setResponseInterceptor(instance)
 
 const postRequest = async (url: string, data = {}): Promise<any> => {
   return await instance.post(url, data)
