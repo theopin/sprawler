@@ -12,9 +12,7 @@ const PdfViewer = () => {
     try {
       const response = await RequestHandler.getRequest("/pdf/simple");
 
-
-      const base64String = await response.text();
-      setPdfData(base64String);
+      setPdfData(response.data);
     } catch (error) {
       console.error("Error fetching PDF:", error);
     }
@@ -39,7 +37,7 @@ const PdfViewer = () => {
 
       {pdfData ? (
         <div style={{ border: "1px solid #ccc", padding: "10px" }}>
-          <Worker workerUrl={`https://unpkg.com/pdfjs-dist@2.15.349/build/pdf.worker.min.js`}>
+          <Worker workerUrl={`https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js`}>
             <Viewer fileUrl={URL.createObjectURL(new Blob([base64ToUint8Array(pdfData)], { type: "application/pdf" }))} />
           </Worker>
         </div>

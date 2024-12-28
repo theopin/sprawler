@@ -1,7 +1,6 @@
-import React from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-import MyInfo from './components/myinfo/MyInfo';
 import PdfViewer from './components/pdf/PdfViewer';
+import MyInfoHandler from './components/myinfo/MyInfoHandler';
 
 function App() {
   return (
@@ -11,7 +10,7 @@ function App() {
       </nav>
       <Routes>
         <Route path="/" element={<div>Welcome to the App</div>} />
-        <Route path="/myinfo" element={<MyInfo />} />
+        <Route path="/myinfo" element={<MyInfoHandler/>} />
         <Route path="/pdf" element={<PdfViewer />} />
       </Routes>
     </BrowserRouter>

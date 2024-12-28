@@ -11,7 +11,7 @@ function generateRandomString(length: number): string {
   return result;
 }
 
-const MyInfo = () => {
+const MyInfoHandler = () => {
   useEffect(() => {
     console.log("triggered");
     const params = new URLSearchParams(location.search);
@@ -83,4 +83,4 @@ const MyInfo = () => {
   );
 };
 
-export default MyInfo;
+export default MyInfoHandler;
