@@ -6,7 +6,7 @@ import { pdfjs } from 'react-pdf';
 import "react-pdf/dist/esm/Page/AnnotationLayer.css"; // For annotations
 import "react-pdf/dist/esm/Page/TextLayer.css"; // For text rendering
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 const PdfViewer = () => {
   const [pdfData, setPdfData] = useState<string | null>(null); // Base64 PDF data
@@ -42,6 +42,16 @@ const PdfViewer = () => {
     }
   };
 
+  // Download the PDF as a base64 file
+  const downloadPdf = () => {
+    if (!pdfData) return;
+
+    const link = document.createElement("a");
+    link.href = `data:application/pdf;base64,${pdfData}`; // Create the download link
+    link.download = "document.pdf"; // Specify the filename
+    link.click(); // Trigger the download
+  };
+
   return (
     <div style={{ margin: "20px" }}>
       <button onClick={fetchPdf} style={{ marginBottom: "20px" }}>
@@ -67,6 +77,11 @@ const PdfViewer = () => {
             </button>
             <p>Page {pageNumber} of {numPages}</p>
           </div>
+
+          {/* Download Button */}
+          <button onClick={downloadPdf} style={{ marginTop: "20px" }}>
+            Download PDF
+          </button>
         </div>
       ) : (
         <p>No PDF loaded</p>

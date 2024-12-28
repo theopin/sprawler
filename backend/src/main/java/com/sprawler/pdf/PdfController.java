@@ -3,11 +3,9 @@ package com.sprawler.pdf;
 import com.lowagie.text.Document;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfWriter;
-import com.sprawler.spring.email.BasicEmailRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayOutputStream;
@@ -24,6 +22,7 @@ public class PdfController {
     public ResponseEntity<String> generateSimplePdf(
             @RequestParam(value = "content", defaultValue = "Hello, OpenPDF!") String content) {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            LOGGER.info("Creating simple pdf");
             Document document = new Document();
             PdfWriter.getInstance(document, outputStream);
 
