@@ -32,6 +32,7 @@
         <java-jwt.version>4.4.0</java-jwt.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>
         <jackson-databind.version>2.18.1</jackson-databind.version>
+        <openpdf.version>2.0.3</openpdf.version>
 
         <!-- plugins version-->
         <maven-war.version>3.3.1</maven-war.version>
@@ -163,6 +164,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
             <version>${spring.boot.version}</version>
+        </dependency>
+
+        <!-- pdf support -->
+        <dependency>
+            <groupId>com.github.librepdf</groupId>
+            <artifactId>openpdf</artifactId>
+            <version>${openpdf.version}</version>
         </dependency>
 
     </dependencies>
