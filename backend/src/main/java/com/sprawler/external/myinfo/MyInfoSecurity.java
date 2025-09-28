@@ -23,6 +23,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.net.URL;
@@ -53,7 +54,7 @@ public class MyInfoSecurity {
     public ECKey generateEphemeralKeys() {
         try {
             return new ECKeyGenerator(Curve.P_256)
-                    .keyID( RandomStringUtils.randomAlphanumeric(40))
+                    .keyID(RandomStringUtils.secure().next(40))
                     .algorithm(JWSAlgorithm.ES256)
                     .keyUse(KeyUse.SIGNATURE)
                     .generate();
@@ -148,7 +149,11 @@ public class MyInfoSecurity {
         JWSObject jwsObj = null;
         DecodedJWT jwt = null;
         try {
-            jwksUrl = new URL(url);
+            jwksUrl = UriComponentsBuilder
+                    .fromUriString(url)
+                    .build()
+                    .toUri()
+                    .toURL();
             jwsObj = JWSObject.parse(token);
 
             // Create a new JWK source with rate limiting and refresh ahead. caching, using sensible default settings
@@ -164,7 +169,7 @@ public class MyInfoSecurity {
 
             // Create a JWS verifier from the JWK set source
             JWSVerifier verifier = new DefaultJWSVerifierFactory().createJWSVerifier(jwsObj.getHeader(),
-                    jwk.get(0).toECKey().toECPublicKey());
+                    jwk.getFirst().toECKey().toECPublicKey());
 
             boolean flag = jwsObj.verify(verifier);
 

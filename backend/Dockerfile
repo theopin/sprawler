@@ -1,4 +1,4 @@
-FROM tomcat:10-jdk17
+FROM tomcat:10-jdk21
 
 # Maintainer information
 LABEL maintainer="theopin"

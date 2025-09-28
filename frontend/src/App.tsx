@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import PdfViewer from './components/pdf/PdfViewer';
 import MyInfoHandler from './components/myinfo/MyInfoHandler';
 

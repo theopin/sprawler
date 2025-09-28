@@ -38,7 +38,8 @@ public class MyInfoController {
     private static final String tokenApiUrl = "https://test.api.myinfo.gov.sg/com/v4/token";
     private static final String personApiUrl = "https://test.api.myinfo.gov.sg/com/v4/person";
     private static final String clientId = "STG2-MYINFO-SELF-TEST";
-    private static final String scope = "uinfin name sex race nationality dob email mobileno regadd housingtype hdbtype marital edulevel noa-basic ownerprivate cpfcontributions cpfbalances";
+    private static final String scope = "uinfin name sex race nationality dob email mobileno regadd";
+    // to test against housingtype hdbtype marital edulevel noa-basic ownerprivate cpfcontributions cpfbalances
 
     private static final String redirectUri = "http://localhost:3001/callback";
     private static final String responseType = "code";
@@ -210,15 +211,14 @@ public class MyInfoController {
             String personUri = UriComponentsBuilder
                     .fromUriString(personApiUrl)
                     .pathSegment(tokenJWT.getSubject())
-                    .queryParam("scope", scope)
-                    .toUriString();
+                    .toUriString() + "?scope=" + scope;
 
             LOGGER.info(personUri);
             LOGGER.info(headers.get("Authorization"));
             LOGGER.info(headers.get("DPoP"));
 
              encryptedResponse = myInfoTemplate.exchange(
-                personUri,
+                     personUri,
                 HttpMethod.GET,
                 requestEntity,
                 String.class
