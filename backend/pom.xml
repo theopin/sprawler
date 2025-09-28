@@ -21,8 +21,8 @@
 
 
         <!-- dependencies version-->
-        <spring.boot.version>3.3.5</spring.boot.version>
-        <spring.version>6.1.14</spring.version>
+        <spring.boot.version>3.5.6</spring.boot.version>
+        <spring.version>6.2.11</spring.version>
         <log4j.version>2.24.1</log4j.version>
         <lombok.version>1.18.34</lombok.version>
         <h2.version>2.3.232</h2.version>
@@ -30,7 +30,7 @@
         <nimbus-jose.version>9.37.2</nimbus-jose.version>
         <oauth2-oidc.version>11.20.1</oauth2-oidc.version>
         <java-jwt.version>4.4.0</java-jwt.version>
-        <commons-lang3.version>3.12.0</commons-lang3.version>
+        <commons-lang3.version>3.19.0</commons-lang3.version>
         <jackson-databind.version>2.18.1</jackson-databind.version>
         <openpdf.version>2.0.3</openpdf.version>
 

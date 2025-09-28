@@ -76,7 +76,7 @@ public class MyInfoController {
         String codeChallenge = myInfoSecurity.createCodeChallenge(verifier);
 
         String redirectUrl = UriComponentsBuilder
-                .fromHttpUrl(authApiUrl)
+                .fromUriString(authApiUrl)
                 .queryParam("code_challenge", codeChallenge)
                 .queryParam("client_id", clientId)
                 .queryParam("scope", scope)
@@ -210,9 +210,9 @@ public class MyInfoController {
         String encryptedResponse = "";
         try {
             String personUri = UriComponentsBuilder
-                    .fromHttpUrl(personApiUrl)
+                    .fromUriString(personApiUrl)
                     .pathSegment(tokenJWT.getSubject())
-                    .queryParam("scope", URLEncoder.encode(scope, StandardCharsets.UTF_8))
+                    .queryParam("scope", scope)
                     .toUriString();
 
             LOGGER.info(personUri);
