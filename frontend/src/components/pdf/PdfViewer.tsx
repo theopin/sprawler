@@ -3,8 +3,9 @@ import { Document, Page } from "react-pdf";
 import { RequestHandler } from "../../utils/api/RequestHandler";
 import { pdfjs } from 'react-pdf';
 
-import "react-pdf/dist/esm/Page/AnnotationLayer.css"; // For annotations
-import "react-pdf/dist/esm/Page/TextLayer.css"; // For text rendering
+import 'react-pdf/dist/Page/TextLayer.css';
+import 'react-pdf/dist/Page/AnnotationLayer.css';
+
 
 pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
