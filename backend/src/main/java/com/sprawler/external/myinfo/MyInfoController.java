@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.interfaces.ECPrivateKey;
@@ -40,7 +38,8 @@ public class MyInfoController {
     private static final String tokenApiUrl = "https://test.api.myinfo.gov.sg/com/v4/token";
     private static final String personApiUrl = "https://test.api.myinfo.gov.sg/com/v4/person";
     private static final String clientId = "STG2-MYINFO-SELF-TEST";
-    private static final String scope = "uinfin name sex race nationality dob email mobileno regadd housingtype hdbtype marital edulevel noa-basic ownerprivate cpfcontributions cpfbalances";
+    private static final String scope = "uinfin name sex race nationality dob email mobileno regadd";
+    // to test against housingtype hdbtype marital edulevel noa-basic ownerprivate cpfcontributions cpfbalances
 
     private static final String redirectUri = "http://localhost:3001/callback";
     private static final String responseType = "code";
@@ -76,7 +75,7 @@ public class MyInfoController {
         String codeChallenge = myInfoSecurity.createCodeChallenge(verifier);
 
         String redirectUrl = UriComponentsBuilder
-                .fromHttpUrl(authApiUrl)
+                .fromUriString(authApiUrl)
                 .queryParam("code_challenge", codeChallenge)
                 .queryParam("client_id", clientId)
                 .queryParam("scope", scope)
@@ -210,17 +209,16 @@ public class MyInfoController {
         String encryptedResponse = "";
         try {
             String personUri = UriComponentsBuilder
-                    .fromHttpUrl(personApiUrl)
+                    .fromUriString(personApiUrl)
                     .pathSegment(tokenJWT.getSubject())
-                    .queryParam("scope", URLEncoder.encode(scope, StandardCharsets.UTF_8))
-                    .toUriString();
+                    .toUriString() + "?scope=" + scope;
 
             LOGGER.info(personUri);
             LOGGER.info(headers.get("Authorization"));
             LOGGER.info(headers.get("DPoP"));
 
              encryptedResponse = myInfoTemplate.exchange(
-                personUri,
+                     personUri,
                 HttpMethod.GET,
                 requestEntity,
                 String.class
