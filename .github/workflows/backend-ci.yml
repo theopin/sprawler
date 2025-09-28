@@ -25,10 +25,10 @@ jobs:
         run: |
           echo "WORKING_DIRECTORY=$(pwd)" >> $GITHUB_ENV
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: 17
+          java-version: 21
           distribution: 'corretto'
 
       - name: Build with Maven
@@ -56,10 +56,10 @@ jobs:
         run: |
           echo "WORKING_DIRECTORY=$(pwd)" >> $GITHUB_ENV
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: 17
+          java-version: 21
           distribution: 'corretto'
 
       - name: Run Junit tests and generate Jacoco Report
@@ -100,10 +100,10 @@ jobs:
         with:
           languages: java-kotlin
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: 17
+          java-version: 21
           distribution: 'corretto'
 
       - name: Build with Maven
@@ -128,10 +128,10 @@ jobs:
         run: |
           echo "WORKING_DIRECTORY=$(pwd)" >> $GITHUB_ENV
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: 17
+          java-version: 21
           distribution: 'corretto'
 
       - name: Run PMD analysis
@@ -158,10 +158,10 @@ jobs:
         run: |
           echo "WORKING_DIRECTORY=$(pwd)" >> $GITHUB_ENV
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: 17
+          java-version: 21
           distribution: 'corretto'
 
       - name: Run Checkstyle analysis
@@ -188,10 +188,10 @@ jobs:
         run: |
           echo "WORKING_DIRECTORY=$(pwd)" >> $GITHUB_ENV
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: 17
+          java-version: 21
           distribution: 'corretto'
 
       - name: Build with Maven
