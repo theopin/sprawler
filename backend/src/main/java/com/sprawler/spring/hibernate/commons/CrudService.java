@@ -3,7 +3,7 @@ package com.sprawler.spring.hibernate.commons;
 import java.util.List;
 import java.util.Optional;
 
-public interface HibernateService<T> {
+public interface CrudService<T> {
 
     List<T> getAllEntities();
 
