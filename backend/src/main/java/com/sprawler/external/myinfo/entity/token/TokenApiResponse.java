@@ -1,4 +1,4 @@
-package com.sprawler.external.myinfo.dto.token;
+package com.sprawler.external.myinfo.entity.token;
 
 import lombok.*;
 

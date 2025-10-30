@@ -3,13 +3,13 @@ package com.sprawler.external.myinfo;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.jwk.ECKey;
 import com.nimbusds.jose.util.Base64URL;
 import com.nimbusds.oauth2.sdk.token.AccessToken;
 import com.nimbusds.oauth2.sdk.token.DPoPAccessToken;
-import com.sprawler.external.myinfo.dto.person.decrypted.DecryptedPersonInfo;
-import com.sprawler.external.myinfo.dto.token.TokenApiResponse;
+import com.sprawler.external.myinfo.dto.request.TokenRequestDTO;
+import com.sprawler.external.myinfo.entity.person.decrypted.DecryptedPersonInfo;
+import com.sprawler.external.myinfo.entity.token.TokenApiResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +28,8 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.interfaces.ECPrivateKey;
-import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Base64;
 import java.util.Collections;
@@ -101,7 +99,7 @@ public class MyInfoService {
         }
     }
 
-    public TokenApiResponse retrieveAccessToken(Map<String, String> userData) {
+    public TokenApiResponse retrieveAccessToken(TokenRequestDTO tokenRequestDTO) {
         LOGGER.info("Making api call to obtain token");
 
         LOGGER.info("Generating DPoP");
@@ -157,8 +155,8 @@ public class MyInfoService {
         // Set up the form parameters
         MultiValueMap<String, String> formParams = new LinkedMultiValueMap<>();
         formParams.add("client_assertion", clientAssertion);
-        formParams.add("code", userData.get("code"));
-        formParams.add("code_verifier", userData.get("verifier"));
+        formParams.add("code", tokenRequestDTO.code());
+        formParams.add("code_verifier", tokenRequestDTO.verifier());
         formParams.add("grant_type", grantType);
         formParams.add("redirect_uri", redirectUri);
         formParams.add("client_id", clientId);

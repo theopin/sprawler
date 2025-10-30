@@ -1,7 +1,8 @@
 package com.sprawler.external.myinfo;
 
-import com.sprawler.external.myinfo.dto.person.decrypted.DecryptedPersonInfo;
-import com.sprawler.external.myinfo.dto.token.TokenApiResponse;
+import com.sprawler.external.myinfo.dto.request.TokenRequestDTO;
+import com.sprawler.external.myinfo.entity.person.decrypted.DecryptedPersonInfo;
+import com.sprawler.external.myinfo.entity.token.TokenApiResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +39,8 @@ public class MyInfoController {
 
     @PostMapping(path = "/token", consumes = MediaType.APPLICATION_JSON_VALUE)
     public TokenApiResponse obtainMyInfoAccessToken(
-            @RequestBody Map<String, String> userData) {
-        return myInfoService.retrieveAccessToken(userData);
+            @RequestBody TokenRequestDTO tokenRequestDTO) {
+        return myInfoService.retrieveAccessToken(tokenRequestDTO);
     }
 
     @GetMapping("/person")

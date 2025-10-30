@@ -1,4 +1,4 @@
-package com.sprawler.external.myinfo.dto.person.decrypted.base;
+package com.sprawler.external.myinfo.entity.person.decrypted.base;
 
 import lombok.*;
 

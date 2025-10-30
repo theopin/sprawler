@@ -1,8 +1,8 @@
-package com.sprawler.external.myinfo.dto.person.decrypted;
+package com.sprawler.external.myinfo.entity.person.decrypted;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.sprawler.external.myinfo.dto.person.decrypted.base.CodeMetadata;
-import com.sprawler.external.myinfo.dto.person.decrypted.base.ValueMetadata;
+import com.sprawler.external.myinfo.entity.person.decrypted.base.CodeMetadata;
+import com.sprawler.external.myinfo.entity.person.decrypted.base.ValueMetadata;
 import lombok.*;
 
 @Getter
