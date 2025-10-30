@@ -10,7 +10,7 @@ function App() {
       </nav>
       <Routes>
         <Route path="/" element={<div>Welcome to the App</div>} />
-        <Route path="/myinfo" element={<MyInfoHandler/>} />
+        <Route path="/callback" element={<MyInfoHandler/>} />
         <Route path="/pdf" element={<PdfViewer />} />
       </Routes>
     </BrowserRouter>

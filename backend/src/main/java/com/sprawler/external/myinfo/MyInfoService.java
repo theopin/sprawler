@@ -71,10 +71,11 @@ public class MyInfoService {
     }
 
     public String createAuthRedirectUrl(String verifier) {
-        String codeChallenge = createCodeChallenge(verifier);
+
+        String codeChallenge = myInfoSecurity.createCodeChallenge(verifier);
 
         return UriComponentsBuilder
-                .fromHttpUrl(authApiUrl)
+                .fromUriString(authApiUrl)
                 .queryParam("code_challenge", codeChallenge)
                 .queryParam("client_id", clientId)
                 .queryParam("scope", scope)
@@ -83,20 +84,7 @@ public class MyInfoService {
                 .queryParam("code_challenge_method", codeChallengeMethod)
                 .queryParam("purpose_id", purposeId)
                 .toUriString();
-    }
 
-    private String createCodeChallenge(String codeVerifier) {
-        try {
-            byte[] bytes = codeVerifier.getBytes(StandardCharsets.US_ASCII);
-            MessageDigest sha256messageDigester = MessageDigest.getInstance("SHA-256");
-            sha256messageDigester.update(bytes, 0, bytes.length);
-            byte[] mdDigest = sha256messageDigester.digest();
-
-            return Base64.getUrlEncoder().withoutPadding().encodeToString(mdDigest);
-        } catch (Exception e) {
-            LOGGER.error(e);
-            return null;
-        }
     }
 
     public TokenApiResponse retrieveAccessToken(TokenRequestDTO tokenRequestDTO) {
@@ -192,7 +180,6 @@ public class MyInfoService {
     }
 
     public DecryptedPersonInfo getPersonDataset(String accessToken, String dpopString) {
-
         LOGGER.info("Running api to retrieve person data");
 
         LOGGER.info("Decoding provided auth token");
@@ -214,10 +201,9 @@ public class MyInfoService {
         String encryptedResponse = "";
         try {
             String personUri = UriComponentsBuilder
-                    .fromHttpUrl(personApiUrl)
+                    .fromUriString(personApiUrl)
                     .pathSegment(tokenJWT.getSubject())
-                    .queryParam("scope", URLEncoder.encode(scope, StandardCharsets.UTF_8))
-                    .toUriString();
+                    .toUriString() + "?scope=" + scope;
 
             LOGGER.info(personUri);
             LOGGER.info(headers.get("Authorization"));

@@ -1,8 +1,9 @@
 package com.sprawler.pdf;
 
-import com.lowagie.text.Document;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfWriter;
+
+import org.openpdf.text.Document;
+import org.openpdf.text.Paragraph;
+import org.openpdf.text.pdf.PdfWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
