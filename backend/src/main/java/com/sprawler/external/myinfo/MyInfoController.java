@@ -44,7 +44,7 @@ public class MyInfoController {
 
     @PostMapping(path = "/token", consumes = MediaType.APPLICATION_JSON_VALUE)
     public TokenApiResponse obtainMyInfoAccessToken(
-            @RequestBody TokenRequestDTO tokenRequestDTO) throws NoSuchAlgorithmException, InvalidKeySpecException, JOSEException {
+            @RequestBody TokenRequestDTO tokenRequestDTO) throws NoSuchAlgorithmException, InvalidKeySpecException, JOSEException, MalformedURLException, ParseException {
         return myInfoService.retrieveAccessToken(tokenRequestDTO);
     }
 

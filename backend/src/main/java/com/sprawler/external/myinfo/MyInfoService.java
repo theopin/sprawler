@@ -104,7 +104,7 @@ public class MyInfoService {
         return Base64.getUrlEncoder().withoutPadding().encodeToString(mdDigest);
     }
 
-    public TokenApiResponse retrieveAccessToken(TokenRequestDTO tokenRequestDTO) throws JOSEException, NoSuchAlgorithmException, InvalidKeySpecException {
+    public TokenApiResponse retrieveAccessToken(TokenRequestDTO tokenRequestDTO) throws JOSEException, NoSuchAlgorithmException, InvalidKeySpecException, MalformedURLException, ParseException {
         LOGGER.info("Making api call to obtain token");
 
         LOGGER.info("Generating DPoP");
@@ -201,7 +201,7 @@ public class MyInfoService {
         return new HttpEntity<>(formParams, headers);
     }
 
-    private TokenApiResponse craftTokenApiResponse(TokenApiResponse tokenApiResponseObject, ECKey sessionPopKeyPair) {
+    private TokenApiResponse craftTokenApiResponse(TokenApiResponse tokenApiResponseObject, ECKey sessionPopKeyPair) throws MalformedURLException, ParseException, JOSEException {
         String jwksUrl = "https://test.authorise.singpass.gov.sg/.well-known/keys.json";
         DecodedJWT tokenJWT = myInfoSecurity
                 .decodeJwtToken(tokenApiResponseObject.getAccess_token(), jwksUrl);
