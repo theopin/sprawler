@@ -17,6 +17,7 @@ import com.nimbusds.jwt.SignedJWT;
 import com.nimbusds.oauth2.sdk.id.JWTID;
 import com.nimbusds.oauth2.sdk.token.AccessToken;
 import com.nimbusds.oauth2.sdk.token.DPoPAccessToken;
+import com.sprawler.external.myinfo.config.MyInfoProperties;
 import com.sprawler.external.myinfo.dto.request.TokenRequestDTO;
 import com.sprawler.external.myinfo.entity.person.decrypted.DecryptedPersonInfo;
 import com.sprawler.external.myinfo.entity.token.TokenApiResponse;
@@ -47,23 +48,7 @@ import java.util.*;
 @Service
 public class MyInfoService {
 
-    private static final String authApiUrl = "https://test.api.myinfo.gov.sg/com/v4/authorize";
-    private static final String tokenApiUrl = "https://test.api.myinfo.gov.sg/com/v4/token";
-    private static final String personApiUrl = "https://test.api.myinfo.gov.sg/com/v4/person";
-    private static final String clientId = "STG2-MYINFO-SELF-TEST";
-    private static final String scope = "uinfin name sex race nationality dob email mobileno regadd housingtype hdbtype marital edulevel noa-basic ownerprivate cpfcontributions cpfbalances";
-
-    private static final String redirectUri = "http://localhost:3001/callback";
-    private static final String responseType = "code";
-
-    private static final String codeChallengeMethod = "S256";
-    private static final String purposeId = "demonstration";
-
-    private static final String grantType = "authorization_code";
-    private static final String clientAssertionType = "urn:ietf:params:oauth:client-assertion-type:jwt-bearer";
-    private static final String keyId = "aQPyZ72NM043E4KEioaHWzixt0owV99gC9kRK388WoQ";
-
-    private static final Logger LOGGER = LogManager.getLogger(MyInfoService.class);
+    private final MyInfoProperties myInfoProperties;
 
     @Autowired
     @Qualifier("myInfoSecurityComponent")
@@ -73,25 +58,32 @@ public class MyInfoService {
     @Qualifier("myInfoTemplate")
     private RestTemplate myInfoTemplate;
 
+    // Constructor injection (Spring Boot will auto-wire it)
+    public MyInfoService(MyInfoProperties myInfoProperties) {
+        this.myInfoProperties = myInfoProperties;
+    }
+
+    private static final Logger LOGGER = LogManager.getLogger(MyInfoService.class);
+
+
     public DecryptedPersonInfo getSandboxPersonData(String uinFin) {
         return myInfoTemplate.getForEntity(
-                "https://sandbox.api.myinfo.gov.sg/com/v4/person-sample/" + uinFin,
+                myInfoProperties.sandboxPersonApiUrl() + uinFin,
                 DecryptedPersonInfo.class).getBody();
     }
 
     public String createAuthRedirectUrl(String verifier) throws NoSuchAlgorithmException {
-
         String codeChallenge = createCodeChallenge(verifier);
 
         return UriComponentsBuilder
-                .fromUriString(authApiUrl)
+                .fromUriString(myInfoProperties.authApiUrl())
                 .queryParam("code_challenge", codeChallenge)
-                .queryParam("client_id", clientId)
-                .queryParam("scope", scope)
-                .queryParam("redirect_uri", redirectUri)
-                .queryParam("response_type", responseType)
-                .queryParam("code_challenge_method", codeChallengeMethod)
-                .queryParam("purpose_id", purposeId)
+                .queryParam("client_id", myInfoProperties.clientId())
+                .queryParam("scope", myInfoProperties.scope())
+                .queryParam("redirect_uri", myInfoProperties.redirectUri())
+                .queryParam("response_type", myInfoProperties.responseType())
+                .queryParam("code_challenge_method", myInfoProperties.codeChallengeMethod())
+                .queryParam("purpose_id", myInfoProperties.purposeId())
                 .toUriString();
     }
 
@@ -111,7 +103,7 @@ public class MyInfoService {
 
         ECKey sessionPopKeyPair = generateEphemeralKeys();
         String dpopString = myInfoSecurity.generateDPoP(
-                tokenApiUrl,
+                myInfoProperties.tokenApiUrl(),
                 "POST",
                 sessionPopKeyPair,
                 null,
@@ -125,17 +117,17 @@ public class MyInfoService {
         assert jktThumbprint != null;
 
         String clientAssertion = generateClientAssertion(
-                        tokenApiUrl,
-                        clientId,
-                        jktThumbprint,
-                        keyId,
-                        privateSigningKey
-                );
+                myInfoProperties.tokenApiUrl(),
+                myInfoProperties.clientId(),
+                jktThumbprint,
+                myInfoProperties.keyId(),
+                privateSigningKey
+        );
 
         HttpEntity<MultiValueMap<String, String>> requestEntity = generateTokenRequestEntity(tokenRequestDTO, dpopString, clientAssertion);
 
         TokenApiResponse tokenApiResponseObject = myInfoTemplate
-                .postForEntity(tokenApiUrl, requestEntity, TokenApiResponse.class)
+                .postForEntity(myInfoProperties.tokenApiUrl(), requestEntity, TokenApiResponse.class)
                 .getBody();
 
         assert tokenApiResponseObject != null;
@@ -190,10 +182,10 @@ public class MyInfoService {
         formParams.add("client_assertion", clientAssertion);
         formParams.add("code", tokenRequestDTO.code());
         formParams.add("code_verifier", tokenRequestDTO.verifier());
-        formParams.add("grant_type", grantType);
-        formParams.add("redirect_uri", redirectUri);
-        formParams.add("client_id", clientId);
-        formParams.add("client_assertion_type", clientAssertionType);
+        formParams.add("grant_type", myInfoProperties.grantType());
+        formParams.add("redirect_uri", myInfoProperties.redirectUri());
+        formParams.add("client_id", myInfoProperties.clientId());
+        formParams.add("client_assertion_type", myInfoProperties.clientAssertionType());
 
         LOGGER.info(formParams);
         LOGGER.info(headers);
@@ -202,14 +194,13 @@ public class MyInfoService {
     }
 
     private TokenApiResponse craftTokenApiResponse(TokenApiResponse tokenApiResponseObject, ECKey sessionPopKeyPair) throws MalformedURLException, ParseException, JOSEException {
-        String jwksUrl = "https://test.authorise.singpass.gov.sg/.well-known/keys.json";
         DecodedJWT tokenJWT = myInfoSecurity
-                .decodeJwtToken(tokenApiResponseObject.getAccess_token(), jwksUrl);
+                .decodeJwtToken(tokenApiResponseObject.getAccess_token(), myInfoProperties.jwksUrl());
 
         LOGGER.info("Generating dPOP key string to ");
         AccessToken ath = new DPoPAccessToken(tokenApiResponseObject.getAccess_token());
         String dpopPersonString = myInfoSecurity
-                .generateDPoP(personApiUrl,
+                .generateDPoP(myInfoProperties.personApiUrl(),
                         "GET",
                         sessionPopKeyPair,
                         ath,
@@ -224,10 +215,9 @@ public class MyInfoService {
         LOGGER.info("Running api to retrieve person data");
 
         LOGGER.info("Decoding provided auth token");
-        String jwksUrl = "https://test.authorise.singpass.gov.sg/.well-known/keys.json";
 
         DecodedJWT tokenJWT = myInfoSecurity
-                .decodeJwtToken(accessToken, jwksUrl);
+                .decodeJwtToken(accessToken, myInfoProperties.jwksUrl());
 
         LOGGER.info("Building Request Headers for Person API");
         // Set up headers
@@ -238,9 +228,9 @@ public class MyInfoService {
 
         // Build URI with path parameter
         String personUri = UriComponentsBuilder
-                .fromUriString(personApiUrl)
+                .fromUriString(myInfoProperties.personApiUrl())
                 .pathSegment(tokenJWT.getSubject())
-                .toUriString() + "?scope=" + scope;
+                .toUriString() + "?scope=" + myInfoProperties.scope();
 
         String encryptedResponse = "";
         try {
@@ -266,7 +256,7 @@ public class MyInfoService {
 
         LOGGER.info(payload);
 
-        DecodedJWT personJWT = myInfoSecurity.decodeJwtToken(payload, jwksUrl);
+        DecodedJWT personJWT = myInfoSecurity.decodeJwtToken(payload, myInfoProperties.jwksUrl());
 
         LOGGER.info("Formatting result");
         // Convert byte[] to String
@@ -277,23 +267,13 @@ public class MyInfoService {
         return objectMapper.readValue(decryptedPersonApiResponse, DecryptedPersonInfo.class);
     }
 
-    public String getPayload(String result, ECPrivateKey privateKey) {
-        JWEObject jweObject = null;
-        try {
-            // Parse JWE & validate headers
-            jweObject = EncryptedJWT.parse(result);
+    public String getPayload(String result, ECPrivateKey privateKey) throws ParseException, JOSEException {
+        JWEObject jweObject = EncryptedJWT.parse(result);
 
-            // Set PrivateKey and Decrypt
-            JWEDecrypter decrypter = new ECDHDecrypter(privateKey);
-            jweObject.decrypt(decrypter);
-
-        } catch (Exception e) {
-            LOGGER.error(e);
-        }
+        // Set PrivateKey and Decrypt
+        JWEDecrypter decrypter = new ECDHDecrypter(privateKey);
+        jweObject.decrypt(decrypter);
         // Get String Payload
-
-        assert jweObject != null;
-
         return jweObject.getPayload().toString();
     }
 }
