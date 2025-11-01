@@ -1,19 +1,11 @@
 package com.sprawler.spring.validation;
 
 
-import com.sprawler.spring.hibernate.book.Book;
-import com.sprawler.spring.jms.JmsRequest;
-import com.sprawler.spring.jms.JmsResponse;
-import com.sprawler.spring.jms.JmsSender;
 import jakarta.validation.Valid;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/spring/validation")
