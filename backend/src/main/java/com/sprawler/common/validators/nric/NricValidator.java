@@ -3,7 +3,7 @@ package com.sprawler.common.validators.nric;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class NricValidator  implements ConstraintValidator<ValidNric, String> {
+public class NricValidator implements ConstraintValidator<ValidNric, String> {
     @Override
     public boolean isValid(String nric, ConstraintValidatorContext context) {
         if (nric == null || !nric.matches("^[STFG]\\d{7}[A-Z]$")) {
