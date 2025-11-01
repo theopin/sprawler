@@ -11,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.MalformedURLException;
@@ -20,6 +21,7 @@ import java.text.ParseException;
 
 @RestController("myInfoController")
 @RequestMapping("/myinfo")
+@Validated
 public class MyInfoController {
 
     private static final Logger LOGGER = LogManager.getLogger(MyInfoController.class);
@@ -28,7 +30,7 @@ public class MyInfoController {
     private MyInfoService myInfoService;
 
     @GetMapping("/sandbox/person/{uinfin}")
-    public DecryptedPersonInfo getPersonDataFromSandbox(@PathVariable("uinfin") @Valid @ValidNric String uinFin) {
+    public DecryptedPersonInfo getPersonDataFromSandbox(@ValidNric @PathVariable("uinfin") String uinFin) {
         LOGGER.info("Running sandbox api to retrieve person data");
 
         return myInfoService.getSandboxPersonData(uinFin);
