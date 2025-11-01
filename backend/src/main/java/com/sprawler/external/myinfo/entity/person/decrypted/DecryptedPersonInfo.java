@@ -1,6 +1,5 @@
 package com.sprawler.external.myinfo.entity.person.decrypted;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sprawler.external.myinfo.entity.person.decrypted.base.CodeMetadata;
 import com.sprawler.external.myinfo.entity.person.decrypted.base.ValueMetadata;
 import com.sprawler.external.myinfo.entity.person.decrypted.child.BirthChild;
@@ -13,64 +12,57 @@ import com.sprawler.external.myinfo.entity.person.decrypted.cpf.CpfMonthlyPayout
 import com.sprawler.external.myinfo.entity.person.decrypted.schemes.Chas;
 import com.sprawler.external.myinfo.entity.person.decrypted.schemes.GenerationPackage;
 import com.sprawler.external.myinfo.entity.person.decrypted.vehicle.Vehicle;
-import lombok.*;
 
 import java.util.List;
 
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class DecryptedPersonInfo {
-    private ValueMetadata partialuinfin;
-    private ValueMetadata uinfin;
+public record DecryptedPersonInfo (
+     ValueMetadata partialuinfin,
+     ValueMetadata uinfin,
 
-    private ValueMetadata name;
-    private ValueMetadata hanyupinyinname;
-    private ValueMetadata aliasname;
-    private ValueMetadata hanyupinyinaliasname;
-    private ValueMetadata marriedname;
+     ValueMetadata name,
+     ValueMetadata hanyupinyinname,
+     ValueMetadata aliasname,
+     ValueMetadata hanyupinyinaliasname,
+     ValueMetadata marriedname,
 
-    private CodeMetadata sex;
-    private CodeMetadata race;
-    private CodeMetadata secondaryrace;
-    private CodeMetadata dialect;
-    private CodeMetadata nationality;
-    private ValueMetadata dob;
+     CodeMetadata sex,
+     CodeMetadata race,
+     CodeMetadata secondaryrace,
+     CodeMetadata dialect,
+     CodeMetadata nationality,
+     ValueMetadata dob,
 
-    private CodeMetadata birthcountry;
-    private CodeMetadata residentialstatus;
-    private ValueMetadata passportnumber;
-    private ValueMetadata passportexpirydate;
+     CodeMetadata birthcountry,
+     CodeMetadata residentialstatus,
+     ValueMetadata passportnumber,
+     ValueMetadata passportexpirydate,
 
-    private RegAdd regadd;
-    private CodeMetadata housingtype;
-    private CodeMetadata hdbtype;
+     RegAdd regadd,
+     CodeMetadata housingtype,
+     CodeMetadata hdbtype,
     // hdbownership
-    private ValueMetadata ownerprivate;
+     ValueMetadata ownerprivate,
 
-    private ValueMetadata email;
-    private Mobile mobileno;
+     ValueMetadata email,
+     Mobile mobileno,
 
-    private CodeMetadata marital;
-    private ValueMetadata marriagecertno;
-    private CodeMetadata countryofmarriage;
-    private ValueMetadata marriagedate;
-    private ValueMetadata divorcedate;
+     CodeMetadata marital,
+     ValueMetadata marriagecertno,
+     CodeMetadata countryofmarriage,
+     ValueMetadata marriagedate,
+     ValueMetadata divorcedate,
 
-    private List<BirthChild> childrenbirthrecords;
-    private List<SponsoredChild> sponsoredchildrenrecords;
+     List<BirthChild> childrenbirthrecords,
+     List<SponsoredChild> sponsoredchildrenrecords,
 
-    private ValueMetadata occupation;
-    private ValueMetadata employment;
-    private CodeMetadata passtype;
-    private ValueMetadata passstatus;
-    private ValueMetadata passexpirydate;
-    private ValueMetadata employmentsector;
+     ValueMetadata occupation,
+     ValueMetadata employment,
+     CodeMetadata passtype,
+     ValueMetadata passstatus,
+     ValueMetadata passexpirydate,
+     ValueMetadata employmentsector,
 
-    private List<Vehicle> vehicles;
+     List<Vehicle> vehicles,
 
     // drivinglicence
 
@@ -78,9 +70,9 @@ public class DecryptedPersonInfo {
 
     // ltavocationallicences
 
-    private Chas chas;
-    private GenerationPackage merdekagen;
-    private GenerationPackage pioneergen;
+     Chas chas,
+     GenerationPackage merdekagen,
+     GenerationPackage pioneergen,
 
     // noa-basic
     // noa
@@ -89,7 +81,7 @@ public class DecryptedPersonInfo {
 
     // cpfcontributions
     // cpfemployers
-    private CpfBalances cpfbalances;
+     CpfBalances cpfbalances,
     // cpfhousingwithdrawal
     // cpfhomeprotectionscheme
     // cpfdependantprotectionscheme
@@ -97,8 +89,8 @@ public class DecryptedPersonInfo {
     // cpfmedishieldlife
     // cpfrstucurrentyeartaxrelief
     // cpfrstuselftopupamount
-    private CpfLife cpflife;
-    private CpfMonthlyPayouts cpfmonthlypayouts;
-
+     CpfLife cpflife,
+     CpfMonthlyPayouts cpfmonthlypayouts
+) {
 
 }

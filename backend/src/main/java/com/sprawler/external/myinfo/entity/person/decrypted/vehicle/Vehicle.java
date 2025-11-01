@@ -2,59 +2,56 @@ package com.sprawler.external.myinfo.entity.person.decrypted.vehicle;
 
 import com.sprawler.external.myinfo.entity.person.decrypted.base.CodeObject;
 import com.sprawler.external.myinfo.entity.person.decrypted.base.ValueObject;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
-@NoArgsConstructor
-public class Vehicle {
-    private ValueObject vehicleno;
-    private ValueObject type;
-    private ValueObject iulabelno;
-    private ValueObject make;
-    private ValueObject model;
 
-    private ValueObject chassisno;
-    private ValueObject engineno;
-    private ValueObject motorno;
-    private ValueObject yearofmanufacture;
-    private ValueObject firstregistrationdate;
-    private ValueObject originalregistrationdate;
+public record Vehicle (
+        ValueObject vehicleno,
+        ValueObject type,
+        ValueObject iulabelno,
+        ValueObject make,
+        ValueObject model,
 
-    private ValueObject coecategory;
-    private ValueObject coeexpirydate;
-    private ValueObject roadtaxexpirydate;
-    private ValueObject quotapremium;
-    private ValueObject openmarketvalue;
+        ValueObject chassisno,
+        ValueObject engineno,
+        ValueObject motorno,
+        ValueObject yearofmanufacture,
+        ValueObject firstregistrationdate,
+        ValueObject originalregistrationdate,
 
-    private ValueObject co2emission;
-    private CodeObject status;
+        ValueObject coecategory,
+        ValueObject coeexpirydate,
+        ValueObject roadtaxexpirydate,
+        ValueObject quotapremium,
+        ValueObject openmarketvalue,
 
-    private ValueObject primarycolour;
-    private ValueObject secondarycolour;
+        ValueObject co2emission,
+        CodeObject status,
 
-    private ValueObject attachment1;
-    private ValueObject attachment2;
-    private ValueObject attachment3;
-    private ValueObject scheme;
+        ValueObject primarycolour,
+        ValueObject secondarycolour,
 
-    private ValueObject thcemission;
-    private ValueObject coemission;
-    private ValueObject noxemission;
-    private ValueObject pmemission;
-    private ValueObject enginecapacity;
-    private ValueObject powerrate;
-    private ValueObject propellant;
+        ValueObject attachment1,
+        ValueObject attachment2,
+        ValueObject attachment3,
+        ValueObject scheme,
 
-    private ValueObject maximumunladenweight;
-    private ValueObject maximumladenweight;
-    private ValueObject minimumparfbenefit;
-    private ValueObject nooftransfers;
-    private ValueObject vpc;
+        ValueObject thcemission,
+        ValueObject coemission,
+        ValueObject noxemission,
+        ValueObject pmemission,
+        ValueObject enginecapacity,
+        ValueObject powerrate,
+        ValueObject propellant,
 
-    private String classification;
-    private String source;
-    private String lastupdated;
+        ValueObject maximumunladenweight,
+        ValueObject maximumladenweight,
+        ValueObject minimumparfbenefit,
+        ValueObject nooftransfers,
+        ValueObject vpc,
+
+        String classification,
+        String source,
+        String lastupdated
+) {
+
 }

@@ -6,14 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
-@NoArgsConstructor
-public class GenerationPackage {
-    private ValueObject eligibility;
-    private ValueObject quantum;
-    private CodeObject message;
-    private String classification;
-    private String source;
-    private String lastupdated;
+public record GenerationPackage (
+         ValueObject eligibility,
+         ValueObject quantum,
+         CodeObject message,
+         String classification,
+         String source,
+         String lastupdated
+){
 }

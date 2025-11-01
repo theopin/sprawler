@@ -1,14 +1,11 @@
 package com.sprawler.external.myinfo.entity.person.decrypted.base;
 
-import lombok.*;
+public record CodeMetadata (
+        String code,
+        String desc,
+        String classification,
+        String source,
+        String lastupdated
+) {
 
-@Getter
-@Setter
-@NoArgsConstructor
-public class CodeMetadata {
-    private String code;
-    private String desc;
-    private String classification;
-    private String source;
-    private String lastupdated;
 }
