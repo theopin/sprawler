@@ -21,8 +21,8 @@
 
 
         <!-- dependencies version-->
-        <spring.boot.version>3.5.6</spring.boot.version>
-        <spring.version>6.2.11</spring.version>
+        <spring.boot.version>3.5.7</spring.boot.version>
+        <spring.version>6.2.12</spring.version>
         <log4j.version>2.25.2</log4j.version>
         <lombok.version>1.18.42</lombok.version>
         <h2.version>2.4.240</h2.version>
@@ -31,8 +31,9 @@
         <oauth2-oidc.version>11.29.1</oauth2-oidc.version>
         <java-jwt.version>4.5.0</java-jwt.version>
         <commons-lang3.version>3.19.0</commons-lang3.version>
-        <jackson-databind.version>2.20.0</jackson-databind.version>
+        <jackson.version>2.20.0</jackson.version>
         <openpdf.version>3.0.0</openpdf.version>
+        <netty.version>4.2.6.Final</netty.version>
 
         <!-- plugins version-->
         <maven-war.version>3.3.1</maven-war.version>
@@ -128,13 +129,13 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-handler</artifactId>
-            <version>4.2.6.Final</version>
+            <version>${netty.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-common</artifactId>
-            <version>4.2.6.Final</version>
+            <version>${netty.version}</version>
         </dependency>
 
         <!--   Spring Cache Support -->
@@ -168,6 +169,16 @@
         <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </exclusion>
+            </exclusions>
             <version>${java-jwt.version}</version>
         </dependency>
 
@@ -179,7 +190,12 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>${jackson-databind.version}</version>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
 
         <!--   Spring Security Support     -->

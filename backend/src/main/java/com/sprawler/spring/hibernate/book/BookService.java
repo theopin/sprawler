@@ -1,6 +1,6 @@
 package com.sprawler.spring.hibernate.book;
 
-import com.sprawler.spring.hibernate.commons.HibernateService;
+import com.sprawler.spring.hibernate.commons.CrudService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service("bookService")
-public class BookService implements HibernateService<Book> {
+public class BookService implements CrudService<Book> {
 
     private static String unused;
     @Autowired
