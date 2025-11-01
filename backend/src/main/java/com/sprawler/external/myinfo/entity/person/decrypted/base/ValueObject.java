@@ -4,9 +4,7 @@ import lombok.*;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class ValueObject {
-    String value;
+    private String value;
 }

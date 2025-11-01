@@ -4,9 +4,7 @@ import lombok.*;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class CodeMetadata {
     private String code;
     private String desc;

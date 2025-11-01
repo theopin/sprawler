@@ -31,7 +31,7 @@
         <oauth2-oidc.version>11.29.1</oauth2-oidc.version>
         <java-jwt.version>4.5.0</java-jwt.version>
         <commons-lang3.version>3.19.0</commons-lang3.version>
-        <jackson-databind.version>2.20.0</jackson-databind.version>
+        <jackson.version>2.20.0</jackson.version>
         <openpdf.version>3.0.0</openpdf.version>
 
         <!-- plugins version-->
@@ -168,6 +168,16 @@
         <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </exclusion>
+            </exclusions>
             <version>${java-jwt.version}</version>
         </dependency>
 
@@ -179,7 +189,12 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>${jackson-databind.version}</version>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
 
         <!--   Spring Security Support     -->

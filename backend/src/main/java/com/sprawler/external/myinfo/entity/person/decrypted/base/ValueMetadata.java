@@ -4,9 +4,7 @@ import lombok.*;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class ValueMetadata {
     private String value;
     private String classification;
