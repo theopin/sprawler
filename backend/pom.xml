@@ -34,6 +34,7 @@
         <jackson.version>2.20.0</jackson.version>
         <openpdf.version>3.0.0</openpdf.version>
         <netty.version>4.2.6.Final</netty.version>
+        <maven.compiler.version>3.11.0</maven.compiler.version>
 
         <!-- plugins version-->
         <maven-war.version>3.3.1</maven-war.version>
@@ -218,10 +219,25 @@
         <finalName>sprawler-backend</finalName>
         <plugins>
             <!-- Build Support-->
+            <!-- Maven Compiler Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.version}</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring.boot.version}</version>
+
                 <executions>
                     <execution>
                         <goals>
