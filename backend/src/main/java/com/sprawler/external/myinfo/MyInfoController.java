@@ -2,6 +2,7 @@ package com.sprawler.external.myinfo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nimbusds.jose.JOSEException;
+import com.sprawler.common.validators.nric.ValidNric;
 import com.sprawler.external.myinfo.dto.request.TokenRequestDTO;
 import com.sprawler.external.myinfo.entity.person.decrypted.DecryptedPersonInfo;
 import com.sprawler.external.myinfo.entity.token.TokenApiResponse;
@@ -26,7 +27,7 @@ public class MyInfoController {
     private MyInfoService myInfoService;
 
     @GetMapping("/sandbox/person/{uinfin}")
-    public DecryptedPersonInfo getPersonDataFromSandbox(@PathVariable("uinfin") String uinFin) {
+    public DecryptedPersonInfo getPersonDataFromSandbox(@PathVariable("uinfin") @ValidNric String uinFin) {
         LOGGER.info("Running sandbox api to retrieve person data");
 
         return myInfoService.getSandboxPersonData(uinFin);
