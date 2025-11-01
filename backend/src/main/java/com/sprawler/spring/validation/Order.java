@@ -6,8 +6,8 @@ import java.util.Date;
 
 public record Order(
 
-        @AssertFalse
-        boolean isHibernateOrder,
+        @AssertTrue
+        boolean isNormalOrder,
 
         @DecimalMin("5.50")
         @DecimalMax("50")
@@ -23,7 +23,7 @@ public record Order(
         @Future
         Date futureDate,
 
-        @Null(message = "Rating should be null.")
+        @NotNull(message = "Rating should not be null.")
         String rating
 
 ) {
