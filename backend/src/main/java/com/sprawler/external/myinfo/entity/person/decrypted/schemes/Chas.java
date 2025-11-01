@@ -12,6 +12,6 @@ public record Chas (
         String classification,
         String source,
         String lastupdated
-){
+) {
 
 }

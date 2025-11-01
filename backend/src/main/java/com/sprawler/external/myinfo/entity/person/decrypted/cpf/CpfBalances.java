@@ -7,6 +7,6 @@ public record CpfBalances (
         ValueMetadata oa,
         ValueMetadata sa,
         ValueMetadata ra
-){
+) {
 
 }

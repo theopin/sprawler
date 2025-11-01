@@ -2,7 +2,7 @@ package com.sprawler.external.myinfo.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix="myinfo")
+@ConfigurationProperties(prefix = "myinfo")
 public record MyInfoProperties(
         String sandboxPersonApiUrl,
         String authApiUrl,
