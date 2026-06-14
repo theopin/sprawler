@@ -1,0 +1,12 @@
+rootProject.name = 'sprawler'
+
+include 'backend'
+project(':backend').projectDir = file('backend')
+
+// BOM is a Maven module, managed separately
+// To use the BOM in Gradle modules, reference it in build.gradle:
+// dependencyManagement {
+//     imports {
+//         mavenBom 'com.sprawler:sprawler-bom:0.0.1-SNAPSHOT'
+//     }
+// }
