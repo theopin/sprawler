@@ -10,7 +10,7 @@ group = 'com.sprawler'
 version = '0.0.1-SNAPSHOT'
 
 repositories {
-    mavenLocal()  // First check local Maven cache for BOM
+    mavenLocal()  // Fallback for pre-published artifacts
     mavenCentral()
 }
 
@@ -19,11 +19,8 @@ java {
     targetCompatibility = '21'
 }
 
-dependencyManagement {
-    imports {
-        mavenBom 'com.sprawler:sprawler-bom:0.0.1-SNAPSHOT'
-    }
-}
+// Apply version management from bom/build.gradle (file-based, no Maven required)
+apply from: '../bom/build.gradle'
 
 dependencies {
     // Spring Boot Starters

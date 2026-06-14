@@ -1,0 +1,46 @@
+// Gradle-native BOM that can be imported via file reference
+// This allows version management without requiring Maven install
+// Reference this in build.gradle via: mavenBom files('../bom/build.gradle')
+
+// All dependency versions defined here
+ext {
+    springBootVersion = '3.5.15'
+    springVersion = '6.2.19'
+    lombokVersion = '1.18.42'
+    h2Version = '2.4.240'
+    activemqVersion = '6.2.6'
+    nimbusJoseVersion = '10.5'
+    oauth2OidcVersion = '11.29.1'
+    javaJwtVersion = '4.5.0'
+    commonsLang3Version = '3.19.0'
+    jacksonVersion = '2.20.0'
+    openPdfVersion = '3.0.0'
+    nettyVersion = '4.2.15.Final'
+    
+    // Plugin versions
+    jacocoVersion = '0.8.12'
+}
+
+// Define all dependency versions
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+    }
+    
+    dependencies {
+        // Spring Boot Starters (inherited from spring-boot-dependencies BOM)
+        dependency "org.springframework:spring-jms:${springVersion}"
+        dependency "com.h2database:h2:${h2Version}"
+        dependency "org.projectlombok:lombok:${lombokVersion}"
+        dependency "org.apache.activemq:activemq-broker:${activemqVersion}"
+        dependency "com.nimbusds:nimbus-jose-jwt:${nimbusJoseVersion}"
+        dependency "com.nimbusds:oauth2-oidc-sdk:${oauth2OidcVersion}"
+        dependency "com.auth0:java-jwt:${javaJwtVersion}"
+        dependency "org.apache.commons:commons-lang3:${commonsLang3Version}"
+        dependency "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+        dependency "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+        dependency "io.netty:netty-handler:${nettyVersion}"
+        dependency "io.netty:netty-common:${nettyVersion}"
+        dependency "com.github.librepdf:openpdf:${openPdfVersion}"
+    }
+}
