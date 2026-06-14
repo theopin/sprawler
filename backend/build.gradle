@@ -9,19 +9,22 @@ plugins {
 group = 'com.sprawler'
 version = '0.0.1-SNAPSHOT'
 
+
+java {
+    sourceCompatibility = '17'
+    targetCompatibility = '17'
+}
+
 repositories {
     mavenLocal()
     mavenCentral()
 }
 
-java {
-    sourceCompatibility = '21'
-    targetCompatibility = '21'
+dependencyManagement {
+    imports {
+        mavenBom 'com.sprawler:sprawler-bom:0.0.1-SNAPSHOT'
+    }
 }
-
-// Import dependency management from bom/build.gradle
-// This script defines all version constraints from bom/pom.xml in Gradle format
-apply from: '../bom/build.gradle'
 
 dependencies {
     // Spring Boot Starters
@@ -32,7 +35,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    
+
     // Spring Framework
     implementation 'org.springframework:spring-jms'
 
@@ -61,15 +64,13 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation 'com.fasterxml.jackson.core:jackson-core'
 
-    // Netty - Fix for netty transport vulnerability
-    implementation 'io.netty:netty-handler'
-    implementation 'io.netty:netty-common'
-
     // PDF Support
     implementation 'com.github.librepdf:openpdf'
 
     // Testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {
