@@ -1,34 +1,48 @@
-// Gradle-native BOM that can be imported via file reference
-// This allows version management without requiring Maven install
-// Reference this in build.gradle via: mavenBom files('../bom/build.gradle')
+// Gradle-native BOM configuration
+// This file is applied via: apply from: '../bom/build.gradle'
+// It defines all dependency versions that are used throughout the project
 
-// All dependency versions defined here
 ext {
+    // Spring versions
     springBootVersion = '3.5.15'
     springVersion = '6.2.19'
-    lombokVersion = '1.18.42'
+    
+    // Database
     h2Version = '2.4.240'
+    
+    // Utilities
+    lombokVersion = '1.18.42'
+    commonsLang3Version = '3.19.0'
+    
+    // ActiveMQ
     activemqVersion = '6.2.6'
+    
+    // Security & JWT
     nimbusJoseVersion = '10.5'
     oauth2OidcVersion = '11.29.1'
     javaJwtVersion = '4.5.0'
-    commonsLang3Version = '3.19.0'
+    
+    // JSON Processing
     jacksonVersion = '2.20.0'
-    openPdfVersion = '3.0.0'
+    
+    // Networking
     nettyVersion = '4.2.15.Final'
     
-    // Plugin versions
+    // PDF
+    openPdfVersion = '3.0.0'
+    
+    // Testing & Reporting
     jacocoVersion = '0.8.12'
 }
 
-// Define all dependency versions
+// Import Spring Boot's managed dependencies (includes many transitive versions)
 dependencyManagement {
     imports {
         mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
     }
     
     dependencies {
-        // Spring Boot Starters (inherited from spring-boot-dependencies BOM)
+        // Additional dependencies not in Spring Boot BOM
         dependency "org.springframework:spring-jms:${springVersion}"
         dependency "com.h2database:h2:${h2Version}"
         dependency "org.projectlombok:lombok:${lombokVersion}"

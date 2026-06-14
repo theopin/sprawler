@@ -10,7 +10,7 @@ group = 'com.sprawler'
 version = '0.0.1-SNAPSHOT'
 
 repositories {
-    mavenLocal()  // Fallback for pre-published artifacts
+    mavenLocal()
     mavenCentral()
 }
 
@@ -19,7 +19,9 @@ java {
     targetCompatibility = '21'
 }
 
-// Apply version management from bom/build.gradle (file-based, no Maven required)
+// Import version management from bom/build.gradle
+// This references ../bom/build.gradle which has all dependency versions defined
+// No need for Maven artifact or pom.xml parsing - pure Gradle
 apply from: '../bom/build.gradle'
 
 dependencies {
