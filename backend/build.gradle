@@ -10,6 +10,7 @@ group = 'com.sprawler'
 version = '0.0.1-SNAPSHOT'
 
 repositories {
+    mavenLocal()  // First check local Maven cache for BOM
     mavenCentral()
 }
 
