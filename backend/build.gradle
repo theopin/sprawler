@@ -1,0 +1,130 @@
+plugins {
+    id 'java'
+    id 'war'
+    id 'org.springframework.boot' version '3.5.15'
+    id 'io.spring.dependency-management' version '1.1.6'
+    id 'jacoco'
+}
+
+group = 'com.sprawler'
+version = '0.0.1-SNAPSHOT'
+
+
+java {
+    sourceCompatibility = '17'
+    targetCompatibility = '17'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom 'com.sprawler:sprawler-bom:0.0.1-SNAPSHOT'
+    }
+}
+
+dependencies {
+    // Spring Boot Starters
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // Spring Framework
+    implementation 'org.springframework:spring-jms'
+
+    // Database
+    runtimeOnly 'com.h2database:h2'
+
+    // Project Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // ActiveMQ
+    implementation 'org.apache.activemq:activemq-broker'
+
+    // Security & JWT
+    implementation 'com.nimbusds:nimbus-jose-jwt'
+    implementation 'com.nimbusds:oauth2-oidc-sdk'
+    implementation('com.auth0:java-jwt') {
+        exclude group: 'com.fasterxml.jackson.core', module: 'jackson-core'
+        exclude group: 'com.fasterxml.jackson.core', module: 'jackson-databind'
+    }
+
+    // Apache Commons
+    implementation 'org.apache.commons:commons-lang3'
+
+    // Jackson
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'com.fasterxml.jackson.core:jackson-core'
+
+    // PDF Support
+    implementation 'com.github.librepdf:openpdf'
+
+    // Testing
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+// JaCoCo Configuration
+jacoco {
+    toolVersion = '0.8.12'
+}
+
+test {
+    jacoco {
+        enabled = true
+    }
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+        csv.required = false
+    }
+}
+
+test.finalizedBy jacocoTestReport
+
+// War configuration
+war {
+    enabled = true
+    archiveFileName = 'sprawler-backend.war'
+}
+
+// Spring Boot repackage as JAR
+springBoot {
+    buildInfo()
+}
+
+// Compiler options
+tasks.withType(JavaCompile) {
+    options.compilerArgs << '-parameters'
+}
+
+// Task to run PMD
+tasks.register('pmd') {
+    doLast {
+        println 'PMD analysis would go here - configure with gradle-pmd plugin if needed'
+    }
+}
+
+// Task to run Checkstyle
+tasks.register('checkstyle') {
+    doLast {
+        println 'Checkstyle analysis would go here - configure with gradle-checkstyle plugin if needed'
+    }
+}

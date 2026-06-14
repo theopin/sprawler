@@ -1,0 +1,15 @@
+rootProject.name = 'sprawler'
+
+include 'backend'
+project(':backend').projectDir = file('backend')
+
+// Dependency Management Strategy:
+// ================================
+// bom/pom.xml  - Maven BOM for Maven projects (if needed in future)
+// bom/build.gradle - Gradle-native BOM (primary for Gradle builds)
+//
+// Backend imports versions from bom/build.gradle via file path:
+//   apply from: '../bom/build.gradle'
+//
+// This eliminates need for 'mvn install' - versions update automatically when bom/build.gradle changes
+

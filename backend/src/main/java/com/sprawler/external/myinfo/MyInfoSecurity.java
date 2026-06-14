@@ -122,7 +122,7 @@ public class MyInfoSecurity {
 
         // Create a JWS verifier from the JWK set source
         JWSVerifier verifier = new DefaultJWSVerifierFactory().createJWSVerifier(jwsObj.getHeader(),
-                jwk.getFirst().toECKey().toECPublicKey());
+                jwk.stream().findFirst().orElseThrow().toECKey().toECPublicKey());
 
         boolean flag = jwsObj.verify(verifier);
 
