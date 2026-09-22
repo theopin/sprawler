@@ -149,8 +149,7 @@ jobs:
 
     steps:
       - name: Deployment stub
-        run : |
-          echo "Deployment to CR"
+        run: echo "Deployment to CR"
 
 
   # Deploy published image to ECS
@@ -160,8 +159,7 @@ jobs:
 
     steps:
       - name: Deployment stub
-        run : |
-          echo "Deployment to ECS"
+        run: echo "Deployment to ECS"
 
   # Deploy published image to ACI
   sd-4c-deploy-azure-aci:
@@ -170,5 +168,4 @@ jobs:
 
     steps:
       - name: Deployment stub
-        run : |
-          echo "Deployment to ACR"
+        run: echo "Deployment to ACR"

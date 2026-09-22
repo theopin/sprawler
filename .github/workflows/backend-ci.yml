@@ -275,8 +275,8 @@ jobs:
       - name: Check Docker container status
         run: |
           if [ "$(docker inspect -f '{{.State.Running}}' sprawler-backend)" != "true" ]; then
-          echo "Container is not running"
-          exit 1
+            echo "Container is not running"
+            exit 1
           fi
 
       - name: Check health of Docker container
