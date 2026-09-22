@@ -38,6 +38,7 @@ dependencies {
 
     // Spring Framework
     implementation 'org.springframework:spring-jms'
+    implementation 'org.springframework.kafka:spring-kafka'
 
     // Database
     runtimeOnly 'com.h2database:h2'
@@ -52,10 +53,7 @@ dependencies {
     // Security & JWT
     implementation 'com.nimbusds:nimbus-jose-jwt'
     implementation 'com.nimbusds:oauth2-oidc-sdk'
-    implementation('com.auth0:java-jwt') {
-        exclude group: 'com.fasterxml.jackson.core', module: 'jackson-core'
-        exclude group: 'com.fasterxml.jackson.core', module: 'jackson-databind'
-    }
+    implementation 'com.auth0:java-jwt'
 
     // Apache Commons
     implementation 'org.apache.commons:commons-lang3'
