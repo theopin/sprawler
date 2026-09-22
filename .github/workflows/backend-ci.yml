@@ -53,9 +53,7 @@ jobs:
           distribution: 'corretto'
 
       - name: Build Backend with Gradle
-        run: |
-          chmod +x gradlew
-          ./gradlew clean build -x test --no-daemon
+        run: chmod +x gradlew && ./gradlew clean build -x test --no-daemon
 
       - name: Upload built artifact for future usage
         uses: actions/upload-artifact@v4.3.3
