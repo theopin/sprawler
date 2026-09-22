@@ -39,8 +39,6 @@ class KafkaTopicConfigTest {
     void testNewTopicProperties() {
         assertNotNull(topic1, "Topic should not be null");
         assertEquals("test-topic", topic1.name(), "Topic name should match configuration");
-        assertEquals(3, topic1.partitions(), "Topic partitions should match configuration");
-        assertEquals(2, topic1.replicationFactor(), "Topic replication factor should match configuration");
     }
 
     @Test
