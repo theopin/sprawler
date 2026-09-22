@@ -4,69 +4,73 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sprawler.spring.messaging.kafka.dto.KafkaMessageDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.DisplayName;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-@SpringBootTest
-@TestPropertySource(properties = {
-    "kafka.bootstrap-servers=localhost:9092",
-    "kafka.group-id=test-group"
-})
+@DisplayName("KafkaProducerService Tests")
 class KafkaProducerServiceTest {
 
-    @Autowired
-    private KafkaProducerService producerService;
-
-    @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
-
-    private KafkaMessageDto testMessage;
+    private KafkaProducerService producerService;
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
-        testMessage = new KafkaMessageDto();
-        testMessage.setId(UUID.randomUUID().toString());
-        testMessage.setType("TEST_MESSAGE");
-        testMessage.setContent("This is a test message");
-        testMessage.setSource("test-source");
-        testMessage.setTimestamp(LocalDateTime.now());
-        testMessage.setMetadata("test-metadata");
+        kafkaTemplate = mock(KafkaTemplate.class);
+        objectMapper = new ObjectMapper();
+        producerService = new KafkaProducerService(kafkaTemplate, objectMapper);
     }
 
     @Test
-    void testProducerServiceBeanCreated() {
-        assertNotNull(producerService, "ProducerService bean should be created");
-    }
-
-    @Test
+    @DisplayName("Should send message to default topic")
     void testSendMessageToDefaultTopic() {
-        assertDoesNotThrow(() -> {
-            producerService.sendMessageToDefaultTopic(testMessage);
-        }, "sendMessageToDefaultTopic should not throw exception");
+        KafkaMessageDto message = new KafkaMessageDto();
+        message.setId(UUID.randomUUID().toString());
+        message.setType("TEST_MESSAGE");
+        message.setContent("This is a test message");
+        message.setSource("test-source");
+        message.setTimestamp(LocalDateTime.now());
+        message.setMetadata("test-metadata");
+
+        producerService.sendMessageToDefaultTopic(message);
+
+        verify(kafkaTemplate, times(1)).send("sprawler-topic", message.getId(), 
+            objectMapper.writeValueAsString(message));
     }
 
     @Test
+    @DisplayName("Should send message to custom topic")
     void testSendMessageToCustomTopic() {
-        assertDoesNotThrow(() -> {
-            producerService.sendMessage("test-topic", testMessage);
-        }, "sendMessage should not throw exception");
+        KafkaMessageDto message = new KafkaMessageDto();
+        message.setId(UUID.randomUUID().toString());
+        message.setType("CUSTOM_MESSAGE");
+        message.setContent("Custom topic message");
+        message.setSource("test-source");
+
+        producerService.sendMessage("custom-topic", message);
+
+        verify(kafkaTemplate, times(1)).send(eq("custom-topic"), eq(message.getId()), anyString());
     }
 
     @Test
-    void testMessageWithoutId() {
-        KafkaMessageDto messageNoId = new KafkaMessageDto();
-        messageNoId.setType("TEST");
-        messageNoId.setContent("Test content");
-        
-        assertDoesNotThrow(() -> {
-            producerService.sendMessageToDefaultTopic(messageNoId);
-        }, "Should handle message without ID");
+    @DisplayName("Should throw exception on serialization error")
+    void testSendMessageWithSerializationError() {
+        KafkaProducerService service = new KafkaProducerService(kafkaTemplate, null);
+        KafkaMessageDto message = new KafkaMessageDto();
+        message.setId("test-id");
+
+        assertThrows(RuntimeException.class, () -> service.sendMessageToDefaultTopic(message));
     }
 }
+
