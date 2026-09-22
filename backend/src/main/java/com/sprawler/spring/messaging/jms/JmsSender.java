@@ -1,4 +1,4 @@
-package com.sprawler.spring.jms;
+package com.sprawler.spring.messaging.jms;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

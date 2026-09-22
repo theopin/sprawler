@@ -1,4 +1,4 @@
-package com.sprawler.spring.jms;
+package com.sprawler.spring.messaging.jms;
 
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Service;

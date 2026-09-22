@@ -1,4 +1,4 @@
-package com.sprawler.spring.jms.config;
+package com.sprawler.spring.messaging.jms.config;
 
 import jakarta.jms.ConnectionFactory;
 import org.apache.activemq.ActiveMQConnectionFactory;
